@@ -1,28 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIOps Flow</title>
+    <title>AIOps Flow - Refactored</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
-        /* Custom styles */
+        /* --- 1. General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light background */
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #f0f4f8;
+            /* Light background */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll */
         }
 
-        /* Style for the connecting lines */
+        /* --- 2. Layout Styles --- */
+        .main-container {
+            /* Uses Tailwind classes for flex/grid, justify, items, gap, min-h, w, max-w, mx-auto */
+            /* Additional styles if needed */
+        }
+
+        .sources-section,
+        .outcomes-section,
+        .diagram-section {
+            /* Uses Tailwind classes for width, order, padding etc. */
+            /* Additional styles if needed */
+        }
+
+        /* --- 3. Diagram Component Styles --- */
+
+        /* Connecting Lines */
         .line {
-            background-color: #6b7280; /* Gray-500 */
+            background-color: #6b7280;
+            /* Gray-500 */
             position: absolute;
             transform-origin: 0 0;
-            z-index: 0; /* Ensure lines are behind nodes */
+            z-index: 0;
+            /* Ensure lines are behind nodes */
         }
 
         .line-horizontal {
@@ -33,11 +54,14 @@
             width: 2px;
         }
 
-         /* Style for the nodes (Atlas, Merlin, etc.) */
-         .node-container {
+        /* Nodes (Atlas, Merlin, etc.) */
+        .node-container {
             position: absolute;
-            z-index: 1; /* Ensure nodes are above lines */
+            /* Crucial for diagram positioning */
+            z-index: 1;
+            /* Ensure nodes are above lines */
         }
+
         .node {
             width: 80px;
             height: 80px;
@@ -48,7 +72,8 @@
             font-weight: 600;
             color: white;
             cursor: pointer;
-            position: relative; /* Needed for absolute positioning of popups */
+            position: relative;
+            /* Needed for absolute positioning of popups */
             transition: transform 0.2s ease-in-out;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -57,36 +82,33 @@
             transform: scale(1.1);
         }
 
-        /* Style for the popups */
+        /* Popups */
         .popup {
-            display: none; /* Hidden by default */
+            display: none;
+            /* Hidden by default */
             position: absolute;
-            bottom: 110%; /* Position above the node */
+            bottom: 110%;
+            /* Position above the node */
             left: 50%;
             transform: translateX(-50%);
             width: 250px;
             background-color: white;
-            color: #374151; /* Gray-700 */
+            color: #374151;
+            /* Gray-700 */
             padding: 12px;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            font-size: 0.875rem; /* text-sm */
+            font-size: 0.875rem;
+            /* text-sm */
             line-height: 1.25rem;
             z-index: 10;
             text-align: left;
-            font-weight: normal; /* Reset font weight */
-        }
-         /* Adjust popup position for nodes lower on the screen */
-        .popup-bottom {
-             bottom: auto;
-             top: 110%;
-        }
-        .popup-bottom::after { /* Triangle pointing up */
-             top: -10px; /* Position above the popup */
-             border-color: transparent transparent white transparent;
+            font-weight: normal;
+            /* Reset font weight */
         }
 
-        .popup::after { /* Triangle pointing down */
+        .popup::after {
+            /* Triangle pointing down */
             content: "";
             position: absolute;
             top: 100%;
@@ -96,42 +118,107 @@
             border-style: solid;
             border-color: white transparent transparent transparent;
         }
-         .popup-bottom::after { /* Triangle pointing up for bottom popups */
-             content: "";
-             position: absolute;
-             bottom: 100%; /* Position above the popup */
-             top: auto;
-             left: 50%;
-             margin-left: -5px;
-             border-width: 5px;
-             border-style: solid;
-             border-color: transparent transparent white transparent;
-         }
 
+        /* Popup adjustments for nodes lower on the screen */
+        .popup-bottom {
+            bottom: auto;
+            top: 110%;
+        }
+
+        .popup-bottom::after {
+            /* Triangle pointing up */
+            top: auto;
+            bottom: 100%;
+            /* Position above the popup */
+            border-color: transparent transparent white transparent;
+        }
 
         /* Show popup on hover */
         .node-container:hover .popup {
             display: block;
         }
 
-        /* --- NEW Carousel Styles --- */
-        #carousel { /* Apply overflow hidden to the container */
-             overflow: hidden;
-             height: 150px; /* Fixed height for 3 items (3 * 50px) */
-             position: relative; /* Needed if using absolute positioning inside */
-            
-             border-radius: 0.5rem; /* rounded-lg - Keep rounding */
+        /* --- 4. Logo Cloud Styles --- */
+        #logo-cloud-wrapper .logo-container {
+            position: relative;
+            /* Needed for absolute positioning of logos */
+            width: 20vw; /* Keep width relative */
+            height: 30vh;
+            max-width: 800px; /* Max width for larger screens */
+            max-height: 500px;
+            /* *** CHANGE: Ensure logo cloud is centered in its section on ALL screen sizes *** */
+            margin: 2rem auto; /* Center horizontally and add vertical margin */
         }
+
+        #logo-cloud-wrapper .logo-card {
+            position: absolute;
+            background-color: white;
+            border-radius: 0.75rem; /* Rounded corners */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* Subtle shadow */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 5rem;
+            height: 5rem;
+            z-index: 1;
+        }
+
+        #logo-cloud-wrapper .logo-icon {
+            font-size: 2.5rem; /* text-4xl, slightly smaller */
+            color: #4a5568; /* Gray-700 */
+        }
+
+        /* Specific icon colors */
+        #logo-cloud-wrapper .fa-github { color: #181717; }
+        #logo-cloud-wrapper .fa-slack { color: #4A154B; }
+        #logo-cloud-wrapper .fa-google-drive { color: #4285F4; }
+        #logo-cloud-wrapper .fa-confluence { color: #172B4D; }
+        #logo-cloud-wrapper .fa-cloud { color: #0078D4; } /* Azure */
+        #logo-cloud-wrapper .fa-server { color: #F58220; } /* Splunk */
+        #logo-cloud-wrapper .fa-bell { color: #06AC38; } /* PagerDuty */
+        #logo-cloud-wrapper .fa-cubes { color: #FF3621; } /* Databricks */
+
+        /* Asymmetric positioning */
+        #logo-cloud-wrapper #splunk { top: 15%; left: 25%; }
+        #logo-cloud-wrapper #pagerduty { top: 45%; left: 10%; }
+        #logo-cloud-wrapper #azure { top: 65%; left: 30%; }
+        #logo-cloud-wrapper #databricks { top: 10%; left: 55%; }
+        #logo-cloud-wrapper #confluence { top: 30%; left: 70%; }
+        #logo-cloud-wrapper #google-drive { top: 55%; left: 50%; }
+        #logo-cloud-wrapper #github { top: 15%; left: 80%; }
+        #logo-cloud-wrapper #slack { top: 70%; left: 75%; }
+
+        /* Fade overlay */
+        #logo-cloud-wrapper .fade-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 70%;
+            height: 100%;
+            background: linear-gradient(to right, #f0f4f8 10%, rgba(240, 244, 248, 0) 70%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* --- 5. Carousel Styles --- */
+        #carousel {
+            overflow: hidden;
+            height: 150px;
+            position: relative;
+            border-radius: 0.5rem; /* rounded-lg */
+        }
+
         .carousel-list {
             list-style: none;
             padding: 0;
             margin: 0;
             width: 100%;
-            /* Smooth slide animation */
             transition: transform 0.8s ease-in-out;
         }
+
         .carousel-list li {
-            height: 50px; /* Adjusted height */
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -141,125 +228,128 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            /* Default non-highlighted style */
-            color: gray; /* text-indigo-700 */
+            color: gray;
             opacity: 0.7;
             font-size: 0.875rem; /* text-sm */
             font-weight: 400; /* Normal weight */
-            /* Transition for style changes */
             transition: color 0.5s ease, opacity 0.5s ease, font-weight 0.5s ease, font-size 0.5s ease;
         }
-        /* Highlighted style for the middle item */
+
         .carousel-list li.highlighted {
-             color: #1e1b4b; /* text-indigo-900 */
-             font-weight: 600; /* font-semibold */
-             opacity: 1;
-             font-size: 1rem; /* text-base */
-        }
-        /* --- End NEW Carousel Styles --- */
-
-
-        /* Source item styling */
-        .source-item {
-            background-color: #ffffff;
-            padding: 0.75rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            font-size: 0.8rem;
-            color: #4b5563; /* Gray-600 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease-in-out;
-        }
-        .source-item:hover {
-             transform: translateY(-2px);
-             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-        }
-        .source-item i {
-            font-size: 1.25rem;
-            margin-bottom: 0.3rem;
-            color: #1e40af; /* Blue-800 */
+            color: #1e1b4b; /* text-indigo-900 */
+            font-weight: 600; /* font-semibold */
+            opacity: 1;
+            font-size: 1rem; /* text-base */
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
+        /* --- 6. Responsive Styles --- */
+        /* Styles for medium screens and up are handled by md: prefixes in HTML */
+
+        @media (max-width: 767.98px) { /* Apply below md breakpoint */
             .main-container {
                 flex-direction: column;
-                align-items: center;
+                align-items: center; /* Center items vertically in column */
             }
-            .sources-section, .outcomes-section {
-                width: 90%;
-                margin-bottom: 2rem;
+
+            /* Adjust section widths and order for mobile */
+            .sources-section,
+            .outcomes-section {
+                width: 90%; /* Take up more width */
+                margin-bottom: 2rem; /* Add space below */
             }
-            .sources-grid {
-                 grid-template-columns: repeat(3, minmax(0, 1fr));
-                 gap: 0.75rem;
-            }
+
+            .sources-section { order: 1; }
+            .outcomes-section { order: 2; }
             .diagram-section {
-                width: 100%;
-                height: auto;
+                width: 100%; /* Full width */
+                height: 50rem; /* Fixed height for vertical stack */
                 padding: 1rem 0;
-                min-height: 500px;
+                min-height: 350px;
                 order: 3;
             }
-             .outcomes-section {
-                 order: 2;
+
+            /* Logo Cloud adjustments for mobile */
+            #logo-cloud-wrapper .logo-container {
+                width: 90vw; /* Wider relative width */
+                height: 50vh; /* Taller relative height */
+                margin: 1rem auto; /* Keep centered */
             }
+
+            #logo-cloud-wrapper .logo-card {
+                width: 4rem; /* Smaller cards */
+                height: 4rem;
+                padding: 0.75rem; /* Smaller padding */
+            }
+
+            #logo-cloud-wrapper .logo-icon {
+                font-size: 1.75rem; /* Smaller icons */
+            }
+
+            /* Adjust positions for smaller screens - Tighter cluster */
+            #logo-cloud-wrapper #splunk { top: 10%; left: 15%; }
+            #logo-cloud-wrapper #pagerduty { top: 35%; left: 5%; }
+            #logo-cloud-wrapper #azure { top: 65%; left: 20%; }
+            #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
+            #logo-cloud-wrapper #confluence { top: 25%; left: 70%; }
+            #logo-cloud-wrapper #google-drive { top: 50%; left: 55%; }
+            #logo-cloud-wrapper #github { top: 10%; left: 75%; }
+            #logo-cloud-wrapper #slack { top: 65%; left: 75%; }
+
+            #logo-cloud-wrapper .fade-overlay {
+                width: 45%; /* Adjusted fade width */
+                background: linear-gradient(to right, #f0f4f8 10%, rgba(240, 244, 248, 0) 50%);
+            }
+
+            /* Diagram adjustments for mobile: Stack nodes vertically */
             .diagram-content {
                 position: relative;
-                height: 500px;
+                height: auto; /* Allow content to determine height */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem; /* Space between nodes */
             }
-            .node-container {
-                 position: static;
-                 margin: 1.5rem 0;
-                 display: flex;
-                 flex-direction: column;
-                 align-items: center;
-            }
-            .line {
-                display: none;
-            }
-             .popup {
-                 position: relative;
-                 bottom: auto;
-                 top: 5px;
-                 left: auto;
-                 transform: none;
-                 width: 90%;
-                 max-width: 300px;
-                 margin-top: 0.5rem;
-                 display: block;
-                 opacity: 0;
-                 transition: opacity 0.3s ease;
-                 pointer-events: none;
-             }
-             .popup::after {
-                 content: "";
-                 position: absolute;
-                 bottom: 100%;
-                 top: auto;
-                 left: 50%;
-                 transform: translateX(-50%);
-                 margin-left: 0;
-                 border-width: 5px;
-                 border-style: solid;
-                 border-color: transparent transparent white transparent;
-             }
-             .node-container:hover .popup {
-                  opacity: 1;
-                  pointer-events: auto;
-             }
-             /* Adjust carousel height slightly for mobile if needed */
-             #carousel {
-                 height: 150px; /* Keep consistent height or adjust */
-             }
-             .carousel-list li {
-                  height: 50px; /* Keep consistent height */
-             }
 
+            .node-container {
+                position: relative; /* Change from absolute */
+                top: auto; left: auto; margin: 0; /* Reset positioning */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .line {
+                display: none; /* Hide connecting lines */
+            }
+
+            .popup {
+                position: relative; /* Change from absolute */
+                display: block; /* Make popups visible */
+                opacity: 1; pointer-events: auto; /* Ensure visible & interactable */
+                bottom: auto; top: 5px; left: auto; /* Position below node */
+                transform: none;
+                width: 90%; max-width: 300px; /* Adjust width */
+                margin-top: 0.5rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+            }
+
+            .popup::after,
+            .popup-bottom::after {
+                /* Style the triangle for relative positioning */
+                content: ""; position: absolute;
+                bottom: 100%; top: auto; /* Position above the popup */
+                left: 50%; transform: translateX(-50%); margin-left: 0;
+                border-width: 5px; border-style: solid;
+                border-color: transparent transparent white transparent;
+            }
+
+            /* No hover effect needed for popups on mobile */
+            .node-container:hover .popup {}
+
+            /* Carousel adjustments for mobile */
+            #carousel { height: 150px; }
+            .carousel-list li { height: 50px; }
         }
     </style>
 </head>
@@ -268,51 +358,35 @@
 
     <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">See Everything. Fix Everything</h1>
 
-    <div class="main-container flex flex-col md:flex-row justify-between items-start md:items-center gap-8 min-h-[60vh] w-full max-w-7xl mx-auto">
+    <div
+        class="main-container flex flex-col md:flex-row md:justify-center items-start md:items-center gap-8 min-h-[60vh] w-full max-w-7xl mx-auto">
 
-        <div>
-            
-            <div class="sources-grid grid grid-cols-2 gap-4">
-                <div class="source-item">
-                    <i class="fas fa-comments"></i>
-                    <span>Collaboration</span>
-                </div>
-                <div class="source-item">
-                    <i class="fas fa-pager"></i>
-                    <span>Pager</span>
-                </div>
-                <div class="source-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Dashboard</span>
-                </div>
-                 <div class="source-item">
-                    <i class="fas fa-tasks"></i>
-                    <span>ITSM</span>
-                </div>
-                <div class="source-item">
-                    <i class="fas fa-envelope"></i>
-                    <span>Email</span>
-                </div>
-                 <div class="source-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Logs</span>
-                </div>
-                 <div class="source-item col-span-2">
-                    <i class="fas fa-book-open"></i>
-                    <span>Knowledge Base</span>
+        <div class="sources-section w-full md:w-1/4 order-1 p-4">
+            <div id="logo-cloud-wrapper">
+                <div class="logo-container">
+                    <div class="fade-overlay"></div>
+                    <div id="splunk" class="logo-card" aria-label="Splunk Logo"><i class="fas fa-server logo-icon" title="Splunk"></i></div>
+                    <div id="pagerduty" class="logo-card" aria-label="PagerDuty Logo"><i class="fas fa-bell logo-icon" title="PagerDuty"></i></div>
+                    <div id="azure" class="logo-card" aria-label="Azure Cloud Logo"><i class="fas fa-cloud logo-icon" title="Azure Cloud"></i></div>
+                    <div id="databricks" class="logo-card" aria-label="Databricks Logo"><i class="fas fa-cubes logo-icon" title="Databricks"></i></div>
+                    <div id="confluence" class="logo-card" aria-label="Confluence Logo"><i class="fab fa-confluence logo-icon" title="Confluence"></i></div>
+                    <div id="google-drive" class="logo-card" aria-label="Google Drive Logo"><i class="fab fa-google-drive logo-icon" title="Google Drive"></i></div>
+                    <div id="github" class="logo-card" aria-label="GitHub Logo"><i class="fab fa-github logo-icon" title="GitHub"></i></div>
+                    <div id="slack" class="logo-card" aria-label="Slack Logo"><i class="fab fa-slack logo-icon" title="Slack"></i></div>
                 </div>
             </div>
         </div>
 
-        <div class="diagram-section w-full md:w-2/4 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
+        <div
+            class="diagram-section w-full md:w-2/4 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
             <div class="diagram-content relative w-full h-full">
-                <div class="line line-horizontal" style="top: 50%; left: 0%; width: 25%;"></div>
-                <div class="line line-horizontal" style="top: 50%; left: 25%; width: 50%;"></div>
+                <div class="line line-horizontal" style="top: 50%; left: 25%; width: 75%;"></div>
                 <div class="line line-vertical" style="top: calc(50% - 80px); left: 50%; height: 80px;"></div>
-                <div class="line line-vertical" style="top: 50%; left: calc(50% + 120px); height: 80px;"></div>
-                <div class="line line-vertical" style="top: 50%; left: calc(70% - 160px); height: 80px;"></div>
+                <div class="line line-vertical" style="top: 50%; left: calc(40% - 40px + 40px / 2 + 40px); height: 80px;"></div>
+                <div class="line line-vertical" style="top: 50%; left: calc(64.5% + 40px + 40px / 2 + 0px); height: 80px;"></div>
+                <div class="line line-horizontal" style="top: calc(50% + 40px); left: calc(50% - 40px + 40px / 2 + 40px); width: calc(63% - 160px - (50% - 40px + 40px / 2 + 40px));"></div>
 
-                <div class="node-container absolute" style="top: calc(50% - 40px); left: calc(25% - 40px);">
+                <div class="node-container" style="top: calc(50% - 40px); left: calc(25% - 40px);">
                     <div class="node bg-blue-600">Atlas</div>
                     <div class="popup">
                         <h3 class="font-semibold mb-1">Atlas</h3>
@@ -320,37 +394,37 @@
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="node-container absolute" style="top: calc(50% - 120px); left: calc(50% - 40px);">
+                <div class="node-container" style="top: calc(50% - 120px); left: calc(50% - 40px);">
                     <div class="node bg-purple-600">Merlin</div>
                     <div class="popup">
                         <h3 class="font-semibold mb-1">Merlin</h3>
                         <p>Enhance the efficiency of on-call teams. Automatically correlate current issues with historical incident resolutions, integrated knowledge bases, and real-time actionable insights.</p>
-                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="node-container absolute" style="top: calc(50% + 40px); left: calc(63% - 160px);">
+                <div class="node-container" style="top: calc(50% + 40px); left: calc(43.5% - 40px);">
                     <div class="node bg-green-600">Argus</div>
-                     <div class="popup popup-bottom">
+                    <div class="popup popup-bottom">
                         <h3 class="font-semibold mb-1">Argus</h3>
                         <p>Transform log management to proactive monitoring. Uses advanced ML for real-time anomaly detection, incident forecasting, and automated root cause analysis.</p>
-                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container absolute" style="top: calc(50% + 40px); left: calc(50% + 80px);">
+                <div class="node-container" style="top: calc(50% + 40px); left: calc(75% - 40px);">
                     <div class="node bg-red-600">Hephaestus</div>
-                     <div class="popup popup-bottom">
+                    <div class="popup popup-bottom">
                         <h3 class="font-semibold mb-1">Hephaestus</h3>
                         <p>Optimize performance and cost efficiency in data environments. Proactively identifies bottlenecks and provides actionable recommendations.</p>
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="line line-horizontal" style="top: 50%; left: 75%; width: 25%;"></div>
             </div>
         </div>
 
-        <div class="outcomes-section w-full md:w-1/4 order-2 md:order-3 p-4 bg-white-100 rounded-lg ">
-            
-            <div id="carousel" class="relative"> <ul class="carousel-list">
+        <div class="outcomes-section w-full md:w-1/4 order-2 md:order-3 p-4 bg-white rounded-lg shadow">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3 text-center">Key Outcomes</h2>
+            <div id="carousel" class="relative">
+                <ul class="carousel-list">
                     </ul>
             </div>
         </div>
@@ -358,147 +432,55 @@
     </div>
 
     <script>
-        // --- NEW Carousel Logic ---
+        // --- Carousel Logic (No changes needed here) ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Configuration ---
-            const phrases = [
-                "Faster Incident Resolution",
-                "Enhanced Operational Efficiency",
-                "Improved System Reliability",
-                "Reduced Operational Costs",
-                "Context-aware incident correlation",
-                "Real-time on-call guidance", // Corrected capitalization
-                "Predictive log analytics",
-                "Anomaly detection",
-                "Root cause analysis"
-            ];
-            const rotationInterval = 3500; // Time (ms) between rotations
-            const transitionDuration = 800; // Duration (ms) of the slide animation (must match CSS transition duration)
-            const itemHeight = 50; // Height of each item (must match li height in CSS)
-
-            // --- DOM Elements ---
-            const carouselContainer = document.getElementById('carousel'); // Get the container by ID
-             if (!carouselContainer) {
-                 console.error("Carousel container element (#carousel) not found!");
-                 return;
-             }
-            const list = carouselContainer.querySelector('.carousel-list'); // Find the list inside the container
-            if (!list) {
-                console.error("Carousel list element (.carousel-list) not found inside #carousel!");
-                return;
-            }
-
-            // --- State Variables ---
-            let currentIndex = 0; // Index of the item currently positioned at the *top* of the visible area
+            const phrases = ["Faster Incident Resolution", "Enhanced Operational Efficiency", "Improved System Reliability", "Reduced Operational Costs", "Context-aware incident correlation", "Real-time on-call guidance", "Predictive log analytics", "Anomaly detection", "Root cause analysis"];
+            const rotationInterval = 3500;
+            const transitionDuration = 800;
+            const itemHeight = 50;
+            const carouselContainer = document.getElementById('carousel');
+            if (!carouselContainer) return;
+            const list = carouselContainer.querySelector('.carousel-list');
+            if (!list) return;
+            let currentIndex = 0;
             const totalOriginalItems = phrases.length;
-            let isResetting = false; // Flag to prevent transitionend firing during reset
-            let intervalId = null; // To store the interval timer
-
-            // --- Initialization ---
-            if (totalOriginalItems === 0) {
-                console.warn("Carousel has no items.");
-                return;
-            }
-             if (totalOriginalItems < 3) {
-                 console.warn("Carousel needs at least 3 items for optimal display.");
-                 // Consider just displaying items statically if less than 3
-             }
-
-            // Duplicate phrases for seamless looping
-            const allPhrases = [...phrases, ...phrases];
-            // Populate the list
-            allPhrases.forEach(phrase => {
-                const li = document.createElement('li');
-                // Apply Tailwind classes directly if preferred, or use the CSS classes defined above
-                // li.className = "h-10 flex items-center justify-center text-center text-gray-500 opacity-70 px-4 whitespace-nowrap overflow-hidden text-ellipsis text-base";
-                li.textContent = phrase;
-                list.appendChild(li);
-            });
-
+            let isResetting = false;
+            let intervalId = null;
+            if (totalOriginalItems === 0) return;
+            const allPhrases = [...phrases, ...phrases, ...phrases];
+            list.innerHTML = '';
+            allPhrases.forEach(phrase => { const li = document.createElement('li'); li.textContent = phrase; list.appendChild(li); });
             const allItems = list.querySelectorAll('li');
-            const totalListItems = allItems.length; // Should be 2 * totalOriginalItems
+            const totalListItems = allItems.length;
+            function updateHighlight() { const middleItemIndex = (currentIndex + 1) % totalListItems; allItems.forEach((item, index) => { if (index % totalOriginalItems === middleItemIndex % totalOriginalItems) { item.classList.add('highlighted'); } else { item.classList.remove('highlighted'); } }); }
+            function rotateCarousel() { if (isResetting) return; currentIndex++; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; updateHighlight(); }
+            function stopCarousel() { if (intervalId) { clearInterval(intervalId); intervalId = null; } }
+            function startCarousel() { stopCarousel(); intervalId = setInterval(rotateCarousel, rotationInterval); }
+            list.addEventListener('transitionend', () => { if (isResetting) return; if (currentIndex >= totalOriginalItems * 2) { isResetting = true; list.style.transition = 'none'; currentIndex %= totalOriginalItems; currentIndex += totalOriginalItems; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; setTimeout(() => { list.style.transition = `transform ${transitionDuration}ms ease-in-out`; isResetting = false; }, 20); } });
+            if (totalOriginalItems > 0) { currentIndex = totalOriginalItems; list.style.transition = 'none'; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; list.offsetHeight; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; }
+            updateHighlight();
+            if (totalOriginalItems >= 3) { startCarousel(); carouselContainer.addEventListener('mouseenter', stopCarousel); carouselContainer.addEventListener('mouseleave', startCarousel); }
+        });
 
-            // --- Functions ---
-            function updateHighlight() {
-                // The highlighted item is the one in the middle of the visible area (index + 1)
-                const middleItemIndex = (currentIndex + 1) % totalListItems;
-                allItems.forEach((item, index) => {
-                    if (index === middleItemIndex) {
-                        item.classList.add('highlighted');
-                    } else {
-                        item.classList.remove('highlighted');
-                    }
-                });
-            }
-
-            function rotateCarousel() {
-                if (isResetting) return; // Don't rotate while resetting
-
-                currentIndex++;
-                list.style.transform = `translateY(-${currentIndex * itemHeight}px)`;
-                updateHighlight();
-                // Reset logic is handled by the 'transitionend' listener
-            }
-
-             // Function to stop the automatic cycling
-            function stopCarousel() {
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                }
-            }
-
-            // Function to start the automatic cycling
-            function startCarousel() {
-                stopCarousel(); // Clear any existing interval first
-                intervalId = setInterval(rotateCarousel, rotationInterval);
-            }
-
-
-            // --- Event Listener for Seamless Reset ---
-            list.addEventListener('transitionend', () => {
-                // Prevent this listener from running if the transition ended because we set it to 'none' during reset
-                if (isResetting) {
-                    return;
-                }
-
-                // Check if we need to reset (reached the end of the first set of items)
-                if (currentIndex >= totalOriginalItems) {
-                    isResetting = true; // Set flag
-
-                    // 1. Disable transitions temporarily
-                    list.style.transition = 'none';
-
-                    // 2. Reset index and jump back to the beginning position instantly
-                    currentIndex = 0;
-                    list.style.transform = 'translateY(0)';
-
-                    // 3. Update highlight for the reset position
-                    updateHighlight();
-
-                    // 4. Force browser repaint/reflow before re-enabling transitions
-                    //    Using requestAnimationFrame ensures the style changes are applied
-                    //    before the transition is turned back on.
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => { // Double RAF for potentially better stability
-                            list.style.transition = `transform ${transitionDuration}ms ease-in-out`;
-                            isResetting = false; // Reset the flag
-                        });
-                    });
-                }
+        // --- Popup Position Logic (No changes needed here) ---
+        document.querySelectorAll('.node-container').forEach(container => {
+            container.addEventListener('mouseenter', () => {
+                if (window.innerWidth < 768) return; // Only run on non-mobile
+                const node = container.querySelector('.node');
+                const popup = container.querySelector('.popup');
+                if (!node || !popup) return;
+                const nodeRect = node.getBoundingClientRect();
+                const popupHeight = popup.offsetHeight;
+                if (nodeRect.top < popupHeight + 20) { popup.classList.add('popup-bottom'); } else { popup.classList.remove('popup-bottom'); }
             });
-
-            // --- Start Carousel ---
-            updateHighlight(); // Apply initial highlighting
-            startCarousel(); // Start rotation
-
-             // --- Optional: Pause carousel on hover ---
-            // carouselContainer.addEventListener('mouseenter', stopCarousel);
-            // carouselContainer.addEventListener('mouseleave', startCarousel);
-
+             container.addEventListener('mouseleave', () => {
+                 if (window.innerWidth < 768) return;
+                 // Optional: Reset popup class on mouseleave if needed
+                 // const popup = container.querySelector('.popup');
+                 // if (popup) popup.classList.remove('popup-bottom');
+             });
         });
     </script>
 
 </body>
-
 </html>
