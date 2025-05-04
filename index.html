@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,21 +7,37 @@
     <title>AIOps Flow</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
-        /* Custom styles */
+        /* --- 1. General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light background */
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #f0f4f8;
+            overflow-x: hidden;
         }
 
-        /* Style for the connecting lines */
+        /* --- 2. Layout Styles --- */
+        .main-container {
+            /* Uses Tailwind classes */
+        }
+
+        .sources-section,
+        .outcomes-section,
+        .diagram-section {
+            /* Uses Tailwind classes */
+        }
+
+        /* --- 3. Diagram Component Styles --- */
+
+        /* Connecting Lines */
         .line {
-            background-color: #6b7280; /* Gray-500 */
+            background-color: #6b7280;
             position: absolute;
             transform-origin: 0 0;
-            z-index: 0; /* Ensure lines are behind nodes */
+            z-index: 0;
         }
 
         .line-horizontal {
@@ -33,17 +48,79 @@
             width: 2px;
         }
 
-         /* Style for the nodes (Atlas, Merlin, etc.) */
-         .node-container {
+        /* Nodes (Atlas, Merlin, etc.) */
+        .node-container {
             position: absolute;
-            z-index: 1; /* Ensure nodes are above lines */
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
-         /* --- 4. Logo Cloud Styles --- */
+        .node-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .node-container:hover .node-image {
+             transform: scale(1.1);
+         }
+
+        /* Popups */
+        .popup {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 250px;
+            background-color: white;
+            color: #374151;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            z-index: 10;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .popup::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .popup-bottom {
+            bottom: auto;
+            top: calc(100% + 10px);
+        }
+
+        .popup-bottom::after {
+            top: auto;
+            bottom: 100%;
+            border-color: transparent transparent white transparent;
+        }
+
+        .node-container:hover .popup {
+            display: block;
+        }
+
+        /* --- 4. Logo Cloud Styles --- */
         #logo-cloud-wrapper .logo-container {
             position: relative;
-            /* Increased size slightly */
-            width: 22vw; /* Adjusted */
-            height: 35vh; /* Adjusted */
+            width: 22vw;
+            height: 35vh;
             max-width: 800px;
             max-height: 500px;
             margin: 2rem auto;
@@ -61,10 +138,10 @@
             width: 4rem;
             height: 4rem;
             z-index: 1;
-             transition: transform 0.2s ease-in-out; /* Added hover effect */
+             transition: transform 0.2s ease-in-out;
         }
          #logo-cloud-wrapper .logo-card:hover {
-             transform: scale(1.1); /* Enlarge on hover */
+             transform: scale(1.1);
          }
 
         #logo-cloud-wrapper .logo-icon {
@@ -82,15 +159,15 @@
         #logo-cloud-wrapper .fa-bell { color: #06AC38; } /* PagerDuty */
         #logo-cloud-wrapper .fa-cubes { color: #FF3621; } /* Databricks */
 
-        /* Asymmetric positioning - ADJUSTED FOR BETTER SPACING */
+        /* Asymmetric positioning */
         #logo-cloud-wrapper #splunk { top: 10%; left: 20%; }
         #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
         #logo-cloud-wrapper #azure { top: 70%; left: 25%; }
         #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
         #logo-cloud-wrapper #confluence { top: 25%; left: 75%; }
         #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; }
-        #logo-cloud-wrapper #github { top: 10%; left: 80%; }
-        #logo-cloud-wrapper #slack { top: 75%; left: 70%; }
+        #logo-cloud-wrapper #github { top: 5%; left: 100%; }
+        #logo-cloud-wrapper #slack { top: 75%; left: 90%; }
 
         /* Fade overlay */
         #logo-cloud-wrapper .fade-overlay {
@@ -103,162 +180,62 @@
             pointer-events: none;
             z-index: 2;
         }
-        .node {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            position: relative; /* Needed for absolute positioning of popups */
-            transition: transform 0.2s ease-in-out;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+        /* --- 5. Carousel Styles --- */
+        #carousel {
+            overflow: hidden;
+            height: 150px;
+            position: relative;
+            border-radius: 0.5rem;
         }
 
-        .node:hover {
-            transform: scale(1.1);
-        }
-
-        /* Style for the popups */
-        .popup {
-            display: none; /* Hidden by default */
-            position: absolute;
-            bottom: 110%; /* Position above the node */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-            background-color: white;
-            color: #374151; /* Gray-700 */
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            font-size: 0.875rem; /* text-sm */
-            line-height: 1.25rem;
-            z-index: 10;
-            text-align: left;
-            font-weight: normal; /* Reset font weight */
-        }
-         /* Adjust popup position for nodes lower on the screen */
-        .popup-bottom {
-             bottom: auto;
-             top: 110%;
-        }
-        .popup-bottom::after { /* Triangle pointing up */
-             top: -10px; /* Position above the popup */
-             border-color: transparent transparent white transparent;
-        }
-
-        .popup::after { /* Triangle pointing down */
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: white transparent transparent transparent;
-        }
-         .popup-bottom::after { /* Triangle pointing up for bottom popups */
-             content: "";
-             position: absolute;
-             bottom: 100%; /* Position above the popup */
-             top: auto;
-             left: 50%;
-             margin-left: -5px;
-             border-width: 5px;
-             border-style: solid;
-             border-color: transparent transparent white transparent;
-         }
-
-
-        /* Show popup on hover */
-        .node-container:hover .popup {
-            display: block;
-        }
-
-        /* --- NEW Carousel Styles --- */
-        #carousel { /* Apply overflow hidden to the container */
-             overflow: hidden;
-             height: 150px; /* Fixed height for 3 items (3 * 50px) */
-             position: relative; /* Needed if using absolute positioning inside */
-            
-             border-radius: 0.5rem; /* rounded-lg - Keep rounding */
-        }
         .carousel-list {
             list-style: none;
             padding: 0;
             margin: 0;
             width: 100%;
-            /* Smooth slide animation */
             transition: transform 0.8s ease-in-out;
         }
+
         .carousel-list li {
-            height: 50px; /* Adjusted height */
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding-left: 0.5rem; /* px-2 */
-            padding-right: 0.5rem; /* px-2 */
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            /* Default non-highlighted style */
-            color: gray; /* text-indigo-700 */
+            color: gray;
             opacity: 0.7;
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 400; /* Normal weight */
-            /* Transition for style changes */
+            font-size: 0.875rem;
+            font-weight: 400;
             transition: color 0.5s ease, opacity 0.5s ease, font-weight 0.5s ease, font-size 0.5s ease;
         }
-        /* Highlighted style for the middle item */
+
         .carousel-list li.highlighted {
-             color: #1e1b4b; /* text-indigo-900 */
-             font-weight: 600; /* font-semibold */
-             opacity: 1;
-             font-size: 1rem; /* text-base */
-        }
-        /* --- End NEW Carousel Styles --- */
-
-
-        /* Source item styling */
-        .source-item {
-            background-color: #ffffff;
-            padding: 0.75rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            font-size: 0.8rem;
-            color: #4b5563; /* Gray-600 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease-in-out;
-        }
-        .source-item:hover {
-             transform: translateY(-2px);
-             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
-        }
-        .source-item i {
-            font-size: 1.25rem;
-            margin-bottom: 0.3rem;
-            color: #1e40af; /* Blue-800 */
+            color: #1e1b4b;
+            font-weight: 600;
+            opacity: 1;
+            font-size: 1rem;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
+        /* --- 6. Responsive Styles --- */
+        @media (max-width: 767.98px) {
             .main-container {
                 flex-direction: column;
                 align-items: center;
             }
-            .sources-section, .outcomes-section {
+
+            .sources-section,
+            .outcomes-section {
                 width: 90%;
                 margin-bottom: 2rem;
-            }.sources-section { order: 1; }
+            }
+
+            .sources-section { order: 1; }
             .outcomes-section { order: 2; }
             .diagram-section {
                 width: 100%;
@@ -271,7 +248,7 @@
             /* Logo Cloud adjustments for mobile */
             #logo-cloud-wrapper .logo-container {
                 width: 90vw;
-                height: 45vh; /* Adjusted height */
+                height: 45vh;
                 margin: 1rem auto;
             }
 
@@ -285,7 +262,6 @@
                 font-size: 1.5rem;
             }
 
-            /* Adjust positions for smaller screens - Keep spread */
             #logo-cloud-wrapper #splunk { top: 10%; left: 15%; }
             #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
             #logo-cloud-wrapper #azure { top: 70%; left: 20%; }
@@ -309,79 +285,57 @@
                 align-items: center;
                 gap: 1rem;
             }
-            .sources-grid {
-                 grid-template-columns: repeat(3, minmax(0, 1fr));
-                 gap: 0.75rem;
-            }
-            .diagram-section {
-                width: 100%;
-                height: auto;
-                padding: 1rem 0;
-                min-height: 500px;
-                order: 3;
-            }
-             .outcomes-section {
-                 order: 2;
-            }
-            .diagram-content {
-                position: relative;
-                height: 500px;
-            }
+
             .node-container {
-                 position: static;
-                 margin: 1.5rem 0;
-                 display: flex;
-                 flex-direction: column;
-                 align-items: center;
+                position: relative;
+                top: auto; left: auto; margin: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
             }
+             .node-image {
+                  margin-bottom: 0.5rem;
+                  width: 70px; /* Slightly smaller on mobile */
+                  height: 70px;
+             }
+
             .line {
                 display: none;
             }
-             .popup {
-                 position: relative;
-                 bottom: auto;
-                 top: 5px;
-                 left: auto;
-                 transform: none;
-                 width: 90%;
-                 max-width: 300px;
-                 margin-top: 0.5rem;
-                 display: block;
-                 opacity: 0;
-                 transition: opacity 0.3s ease;
-                 pointer-events: none;
-             }
-             .popup::after {
-                 content: "";
-                 position: absolute;
-                 bottom: 100%;
-                 top: auto;
-                 left: 50%;
-                 transform: translateX(-50%);
-                 margin-left: 0;
-                 border-width: 5px;
-                 border-style: solid;
-                 border-color: transparent transparent white transparent;
-             }
-             .node-container:hover .popup {
-                  opacity: 1;
-                  pointer-events: auto;
-             }
-             /* Adjust carousel height slightly for mobile if needed */
-             #carousel {
-                 height: 150px; /* Keep consistent height or adjust */
-             }
-             .carousel-list li {
-                  height: 50px; /* Keep consistent height */
-             }
 
+            .popup {
+                position: relative;
+                display: block;
+                opacity: 1; pointer-events: auto;
+                bottom: auto; top: 5px; left: auto;
+                transform: none;
+                width: 90%; max-width: 300px;
+                margin-top: 0.5rem;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            .popup::after,
+            .popup-bottom::after {
+                content: ""; position: absolute;
+                bottom: 100%; top: auto;
+                left: 50%; transform: translateX(-50%); margin-left: 0;
+                border-width: 5px; border-style: solid;
+                border-color: transparent transparent white transparent;
+            }
+
+            .node-container:hover .popup {}
+            .node-container:hover .node-image { transform: none; }
+
+            #carousel { height: 150px; }
+            .carousel-list li { height: 50px; }
         }
     </style>
 </head>
 
 <body class="p-4 md:p-8">
 
-    <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-8">See Everything. Fix Everything</h1>
+    <h1 class="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2">See Everything. Fix Everything</h1>
     <p class="text-center text-base text-gray-600 max-w-3xl mx-auto my-4 px-4">
         Managing complex IT operations can be challenging. What if you could eliminate manual troubleshooting, proactively identify issues, and ensure reliable system performance? Our comprehensive AIOps solutions empower you to do exactly that. Unleashing proactive operational intelligence with our advanced AI-driven incident management solution. We automate log analysis, anomaly detection, and incident resolution to drastically reduce downtime and optimize IT efficiency.
     </p>
@@ -405,17 +359,19 @@
             </div>
         </div>
 
-        <div class="diagram-section w-full md:w-2/4 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
+        <div
+            class="diagram-section w-full md:w-1/3 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
             <div class="diagram-content relative w-full h-full">
-                <div class="line line-horizontal" style="top: 50%; left: 0%; width: 25%;"></div>
-                <div class="line line-horizontal" style="top: 50%; left: 25%; width: 50%;"></div>
-                <div class="line line-vertical" style="top: calc(50% - 80px); left: 50%; height: 80px;"></div>
-                <div class="line line-vertical" style="top: 50%; left: calc(50% + 120px); height: 80px;"></div>
-                <div class="line line-vertical" style="top: 50%; left: calc(70% - 155px); height: 80px;"></div>
+                <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 90px);"></div>
+                <div class="line line-horizontal" style="top: 50%; left: calc(0% + 120px); width: calc(150% - (50% + 40px));"></div>
+                <div class="line line-vertical" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
+                <div class="line line-vertical" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
+                <div class="line line-vertical" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
 
-                               <div class="node-container" style="top: calc(50% - 30px); left: calc(25% - 30px); width: 60px; height: 60px;">
+                <div class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 80px; height: 80px;">
                      <img class="node-image"
-                          src="https://imgur.com/bi1Ya3F.png" onerror="this.onerror=null; this.src='https://placehold.co/60x60/60a5fa/FFFFFF?text=Atlas';"
+                          src="https://imgur.com/bi1Ya3F.png"
+                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';"
                           alt="Atlas Icon (Shield)"
                           title="Atlas: Ingests & Enriches Data">
                     <div class="popup">
@@ -424,9 +380,10 @@
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="node-container" style="top: calc(50% - 120px); left: calc(50% - 30px); width: 60px; height: 60px;">
+                 <div class="node-container" style="top: calc(50% - 140px); left: calc(75% - 40px); width: 80px; height: 80px;">
                     <img class="node-image"
-                         src="https://imgur.com/N9YUnuq.png" onerror="this.onerror=null; this.src='https://placehold.co/60x60/88a0f2/FFFFFF?text=Wizard';"
+                         src="https://imgur.com/N9YUnuq.png"
+                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/88a0f2/FFFFFF?text=Wizard';"
                          alt="Merlin Icon (Wizard)" title="Merlin: Correlation & Pattern Analysis">
                     <div class="popup">
                         <h3 class="font-semibold mb-1">Merlin</h3>
@@ -434,9 +391,10 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="node-container" style="top: calc(50% + 40px); left: calc(63% - 155px); width: 60px; height: 60px;">
+                 <div class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: 80px;">
                      <img class="node-image"
-                          src="https://imgur.com/sXGB3ZY.png" onerror="this.onerror=null; this.src='https://placehold.co/60x60/f2d088/FFFFFF?text=Owl';"
+                          src="https://imgur.com/sXGB3ZY.png"
+                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Owl';"
                           alt="Argus Icon (Owl)" title="Argus: Triaging & Root Cause Analysis">
                      <div class="popup popup-bottom">
                         <h3 class="font-semibold mb-1">Argus</h3>
@@ -444,9 +402,10 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="node-container" style="top: calc(50% + 40px); left: calc(50% + 100px); width: 60px; height: 60px;">
+                 <div class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 80px; height: 80px;">
                      <img class="node-image"
-                          src="https://imgur.com/DR7YeVC.png" onerror="this.onerror=null; this.src='https://placehold.co/60x60/f2a088/FFFFFF?text=Dwarf';"
+                          src="https://imgur.com/DR7YeVC.png"
+                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Dwarf';"
                           alt="Hephaestus Icon (Dwarf/Builder)" title="Hephaestus: Recommended Actions & Updates">
                      <div class="popup popup-bottom">
                         <h3 class="font-semibold mb-1">Hephaestus</h3>
@@ -454,13 +413,13 @@
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                <div class="line line-horizontal" style="top: 50%; left: 75%; width: 25%;"></div>
             </div>
         </div>
 
-        <div class="outcomes-section w-full md:w-1/4 order-2 md:order-3 p-4 bg-white-100 rounded-lg ">
-            
-            <div id="carousel" class="relative"> <ul class="carousel-list">
+        <div class="outcomes-section w-full md:w-1/3 order-2 md:order-3 p-4">
+             
+             <div id="carousel" class="relative">
+                <ul class="carousel-list">
                     </ul>
             </div>
         </div>
@@ -468,147 +427,44 @@
     </div>
 
     <script>
-        // --- NEW Carousel Logic ---
+        // --- Carousel Logic ---
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Configuration ---
-            const phrases = [
-                "Faster Incident Resolution",
-                "Enhanced Operational Efficiency",
-                "Improved System Reliability",
-                "Reduced Operational Costs",
-                "Context-aware incident correlation",
-                "Real-time on-call guidance", // Corrected capitalization
-                "Predictive log analytics",
-                "Anomaly detection",
-                "Root cause analysis"
-            ];
-            const rotationInterval = 3500; // Time (ms) between rotations
-            const transitionDuration = 800; // Duration (ms) of the slide animation (must match CSS transition duration)
-            const itemHeight = 50; // Height of each item (must match li height in CSS)
-
-            // --- DOM Elements ---
-            const carouselContainer = document.getElementById('carousel'); // Get the container by ID
-             if (!carouselContainer) {
-                 console.error("Carousel container element (#carousel) not found!");
-                 return;
-             }
-            const list = carouselContainer.querySelector('.carousel-list'); // Find the list inside the container
-            if (!list) {
-                console.error("Carousel list element (.carousel-list) not found inside #carousel!");
-                return;
-            }
-
-            // --- State Variables ---
-            let currentIndex = 0; // Index of the item currently positioned at the *top* of the visible area
-            const totalOriginalItems = phrases.length;
-            let isResetting = false; // Flag to prevent transitionend firing during reset
-            let intervalId = null; // To store the interval timer
-
-            // --- Initialization ---
-            if (totalOriginalItems === 0) {
-                console.warn("Carousel has no items.");
-                return;
-            }
-             if (totalOriginalItems < 3) {
-                 console.warn("Carousel needs at least 3 items for optimal display.");
-                 // Consider just displaying items statically if less than 3
-             }
-
-            // Duplicate phrases for seamless looping
-            const allPhrases = [...phrases, ...phrases];
-            // Populate the list
-            allPhrases.forEach(phrase => {
-                const li = document.createElement('li');
-                // Apply Tailwind classes directly if preferred, or use the CSS classes defined above
-                // li.className = "h-10 flex items-center justify-center text-center text-gray-500 opacity-70 px-4 whitespace-nowrap overflow-hidden text-ellipsis text-base";
-                li.textContent = phrase;
-                list.appendChild(li);
-            });
-
-            const allItems = list.querySelectorAll('li');
-            const totalListItems = allItems.length; // Should be 2 * totalOriginalItems
-
-            // --- Functions ---
-            function updateHighlight() {
-                // The highlighted item is the one in the middle of the visible area (index + 1)
-                const middleItemIndex = (currentIndex + 1) % totalListItems;
-                allItems.forEach((item, index) => {
-                    if (index === middleItemIndex) {
-                        item.classList.add('highlighted');
-                    } else {
-                        item.classList.remove('highlighted');
-                    }
-                });
-            }
-
-            function rotateCarousel() {
-                if (isResetting) return; // Don't rotate while resetting
-
-                currentIndex++;
-                list.style.transform = `translateY(-${currentIndex * itemHeight}px)`;
-                updateHighlight();
-                // Reset logic is handled by the 'transitionend' listener
-            }
-
-             // Function to stop the automatic cycling
-            function stopCarousel() {
-                if (intervalId) {
-                    clearInterval(intervalId);
-                    intervalId = null;
-                }
-            }
-
-            // Function to start the automatic cycling
-            function startCarousel() {
-                stopCarousel(); // Clear any existing interval first
-                intervalId = setInterval(rotateCarousel, rotationInterval);
-            }
-
-
-            // --- Event Listener for Seamless Reset ---
-            list.addEventListener('transitionend', () => {
-                // Prevent this listener from running if the transition ended because we set it to 'none' during reset
-                if (isResetting) {
-                    return;
-                }
-
-                // Check if we need to reset (reached the end of the first set of items)
-                if (currentIndex >= totalOriginalItems) {
-                    isResetting = true; // Set flag
-
-                    // 1. Disable transitions temporarily
-                    list.style.transition = 'none';
-
-                    // 2. Reset index and jump back to the beginning position instantly
-                    currentIndex = 0;
-                    list.style.transform = 'translateY(0)';
-
-                    // 3. Update highlight for the reset position
-                    updateHighlight();
-
-                    // 4. Force browser repaint/reflow before re-enabling transitions
-                    //    Using requestAnimationFrame ensures the style changes are applied
-                    //    before the transition is turned back on.
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => { // Double RAF for potentially better stability
-                            list.style.transition = `transform ${transitionDuration}ms ease-in-out`;
-                            isResetting = false; // Reset the flag
-                        });
-                    });
-                }
-            });
-
-            // --- Start Carousel ---
-            updateHighlight(); // Apply initial highlighting
-            startCarousel(); // Start rotation
-
-             // --- Optional: Pause carousel on hover ---
-            // carouselContainer.addEventListener('mouseenter', stopCarousel);
-            // carouselContainer.addEventListener('mouseleave', startCarousel);
-
+            const phrases = ["Faster Incident Resolution", "Enhanced Operational Efficiency", "Improved System Reliability", "Reduced Operational Costs", "Context-aware incident correlation", "Real-time on-call guidance", "Predictive log analytics", "Anomaly detection", "Root cause analysis"];
+            const rotationInterval = 3500; const transitionDuration = 800; const itemHeight = 50;
+            const carouselContainer = document.getElementById('carousel'); if (!carouselContainer) return;
+            const list = carouselContainer.querySelector('.carousel-list'); if (!list) return;
+            let currentIndex = 0; const totalOriginalItems = phrases.length; let isResetting = false; let intervalId = null;
+            if (totalOriginalItems === 0) return;
+            const allPhrases = [...phrases, ...phrases, ...phrases]; list.innerHTML = '';
+            allPhrases.forEach(phrase => { const li = document.createElement('li'); li.textContent = phrase; list.appendChild(li); });
+            const allItems = list.querySelectorAll('li'); const totalListItems = allItems.length;
+            function updateHighlight() { const middleItemIndex = (currentIndex + 1) % totalListItems; allItems.forEach((item, index) => { item.classList.toggle('highlighted', index % totalOriginalItems === middleItemIndex % totalOriginalItems); }); }
+            function rotateCarousel() { if (isResetting) return; currentIndex++; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; updateHighlight(); }
+            function stopCarousel() { if (intervalId) { clearInterval(intervalId); intervalId = null; } }
+            function startCarousel() { stopCarousel(); intervalId = setInterval(rotateCarousel, rotationInterval); }
+            list.addEventListener('transitionend', () => { if (isResetting) return; if (currentIndex >= totalOriginalItems * 2) { isResetting = true; list.style.transition = 'none'; currentIndex %= totalOriginalItems; currentIndex += totalOriginalItems; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; setTimeout(() => { list.style.transition = `transform ${transitionDuration}ms ease-in-out`; isResetting = false; }, 20); } });
+            if (totalOriginalItems > 0) { currentIndex = totalOriginalItems; list.style.transition = 'none'; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; list.offsetHeight; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; }
+            updateHighlight();
+            if (totalOriginalItems >= 3) { startCarousel(); carouselContainer.addEventListener('mouseenter', stopCarousel); carouselContainer.addEventListener('mouseleave', startCarousel); }
         });
+
+         // --- Popup Position Logic ---
+         document.querySelectorAll('.node-container').forEach(container => {
+             container.addEventListener('mouseenter', () => {
+                 if (window.innerWidth < 768) return;
+                 const nodeImage = container.querySelector('.node-image');
+                 const popup = container.querySelector('.popup');
+                 if (!nodeImage || !popup) return;
+                 const nodeRect = nodeImage.getBoundingClientRect();
+                 const popupHeight = popup.offsetHeight;
+                 if (nodeRect.top < popupHeight + 20 && !popup.classList.contains('popup-bottom')) {
+                      popup.classList.add('popup-bottom');
+                 } else if (nodeRect.top >= popupHeight + 20 && popup.classList.contains('popup-bottom')) {
+                      popup.classList.remove('popup-bottom');
+                 }
+             });
+         });
     </script>
 
 </body>
-
 </html>
