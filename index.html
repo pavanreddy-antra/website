@@ -43,23 +43,12 @@
         /* --- 3. Diagram Component Styles --- */
 
         /* Keyframes for moving block with trail animation */
-        @keyframes moveTrailLeftToRight {
-            0% { background-position: -150% 0; } /* Start gradient off-screen left */
-            100% { background-position: 150% 0; } /* Move gradient off-screen right */
-        }
-        @keyframes moveTrailTopToBottom {
-            0% { background-position: 0 -150%; } /* Start gradient off-screen top */
-            100% { background-position: 0 150%; } /* Move gradient off-screen bottom */
-        }
-         @keyframes moveTrailBottomToTop {
-             0% { background-position: 0 150%; } /* Start gradient off-screen bottom */
-             100% { background-position: 0 -150%; } /* Move gradient off-screen top */
-         }
+       
 
         /* Keyframes for Node Glow (from original) - BASE GLOW */
         @keyframes pulseNodeGlow {
-            0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } /* Light blue glow */
-            50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }
+            0%, 100% { box-shadow: 0 0 6px 1px rgba(96, 165, 250, 0.3); } /* Reduced intensity */
+            50% { box-shadow: 0 0 10px 2px rgba(96, 165, 250, 0.5); } /* Reduced intensity */
         }
         /* Subtle floating animation for logo cloud */
         @keyframes float {
@@ -79,75 +68,18 @@
             border-radius: 2px; /* Adjusted radius for thinner line */
         }
         .line::after { /* Animated block with trail element */
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            /* Gradient for the moving block with trail effect - light blue */
-            background-image: linear-gradient(
-                to left, /* Gradient direction creates the trail */
-                rgba(191, 219, 254, 0.9), /* Solid block color (blue-200) */
-                rgba(191, 219, 254, 0.9) 20%, /* Block length (adjust %) */
-                rgba(191, 219, 254, 0) 80%, /* Fade out (adjust %) */
-                transparent 100%
-            );
-            background-repeat: no-repeat;
-            /* Size of the gradient - needs to be wider/taller than the line to move across */
-            background-size: 200% 100%; /* Adjust size based on desired trail length/speed */
-            animation: moveTrailLeftToRight 2s linear infinite; /* Apply horizontal animation */
-            opacity: 0.95;
+            content: none;
+            
         }
 
         .line-horizontal {
             height: 2px; /* Made thinner */
         }
-         .line-horizontal::after {
-             background-size: 200% 100%; /* Adjust size for horizontal */
-             animation-name: moveTrailLeftToRight;
-         }
 
         .line-vertical {
             width: 2px; /* Made thinner */
         }
-        .line-vertical::after {
-            /* Vertical gradient with trail */
-             background-image: linear-gradient(
-                to top, /* Trail goes downwards */
-                rgba(191, 219, 254, 0.9),
-                rgba(191, 219, 254, 0.9) 20%,
-                rgba(191, 219, 254, 0) 80%,
-                transparent 100%
-            );
-            background-size: 100% 200%; /* Adjust size for vertical */
-            animation-name: moveTrailTopToBottom; /* Default vertical animation */
-            animation-duration: 2s; /* Match duration */
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-        }
-        /* Specific animation direction for lines flowing upwards */
-         .line-vertical.flow-up::after {
-             /* Gradient needs to point downwards for upward trail */
-             background-image: linear-gradient(
-                to bottom, /* Trail goes upwards */
-                rgba(191, 219, 254, 0.9),
-                rgba(191, 219, 254, 0.9) 20%,
-                rgba(191, 219, 254, 0) 80%,
-                transparent 100%
-            );
-             animation-name: moveTrailBottomToTop;
-         }
-         /* Specific animation direction for lines flowing downwards */
-         .line-vertical.flow-down::after {
-             /* Gradient needs to point upwards for downward trail */
-             background-image: linear-gradient(
-                to top, /* Trail goes downwards */
-                rgba(191, 219, 254, 0.9),
-                rgba(191, 219, 254, 0.9) 20%,
-                rgba(191, 219, 254, 0) 80%,
-                transparent 100%
-            );
-             animation-name: moveTrailTopToBottom;
-         }
+
 
 
         /* Nodes (Using original styles + modifications for activation) */
@@ -172,7 +104,7 @@
             /* Base glow animation */
             animation: pulseNodeGlow 3s infinite ease-in-out;
             /* Base shadow - slightly less intense than pulse peak */
-             box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4);
+            box-shadow: 0 0 6px 1px rgba(96, 165, 250, 0.3);
         }
         .node-label {
             font-size: 0.8rem;
@@ -505,9 +437,9 @@
             <div class="diagram-content relative w-full h-full">
                 <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 120px);"></div>
                 <div class="line line-horizontal" style="top: 50%; left: calc(0% + 130px); width: calc(150% - (50% + 40px));"></div>
-                <div class="line line-vertical flow-up" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
-                <div class="line line-vertical flow-down" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
-                <div class="line line-vertical flow-down" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
+                <div class="line line-vertical" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
+                <div class="line line-vertical" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
+                <div class="line line-vertical" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
 
                 <div id="node-atlas" class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/0ya7Fj7.png"
