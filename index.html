@@ -47,8 +47,8 @@
 
         /* Keyframes for Node Glow (from original) - BASE GLOW */
         @keyframes pulseNodeGlow {
-            0%, 100% { box-shadow: 0 0 6px 1px rgba(96, 165, 250, 0.3); } /* Reduced intensity */
-            50% { box-shadow: 0 0 10px 2px rgba(96, 165, 250, 0.5); } /* Reduced intensity */
+            0%, 50% { box-shadow: 0 0 5px 1px rgba(96, 130, 250, 0.2); } /* Reduced intensity */
+            50% { box-shadow: 0 0 6px 1px rgba(96, 134, 250, 0.2); } /* Reduced intensity */
         }
         /* Subtle floating animation for logo cloud */
         @keyframes float {
@@ -104,7 +104,7 @@
             /* Base glow animation */
             animation: pulseNodeGlow 3s infinite ease-in-out;
             /* Base shadow - slightly less intense than pulse peak */
-            box-shadow: 0 0 6px 1px rgba(96, 165, 250, 0.3);
+            box-shadow: 0 0 4px 1px rgba(96, 165, 250, 0.2);
         }
         .node-label {
             font-size: 0.8rem;
