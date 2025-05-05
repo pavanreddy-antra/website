@@ -15,42 +15,57 @@
         /* --- 1. General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #111827; /* Dark Background (Gray-900) */
-            color: #d1d5db; /* Default light text (Gray-300) */
+            background: linear-gradient(180deg, #1a202c 0%, #111827 100%);
+            color: #e5e7eb; /* Lighter default text (Gray-200) */
             overflow-x: hidden;
+            min-height: 100vh; /* Ensure gradient covers full height */
         }
 
         /* --- 2. Layout Styles --- */
-        .main-container {}
+        .main-container {
+            padding-top: 2rem;
+           padding-bottom: 4rem;
+        }
 
         .sources-section {
              background-color: #1f2937; /* Darker Gray (Gray-800) */
-             border: 1px solid #374151; /* Gray-700 border */
+             backdrop-filter: blur(5px); /* Frosted glass effect */
         }
         .outcomes-section {
             background-color: #1f2937;   /*Darker Gray (Gray-800) */
         }
-        .diagram-section {}
+        .diagram-section {
+            /* Ensure it aligns well vertically */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* --- 3. Diagram Component Styles --- */
 
         /* Connecting Lines - Animated Dashed Style */
         @keyframes flowAnimationHorizontalLeftToRight {
             0% { background-position: 0 0; }
-            100% { background-position: 20px 0; }
+            100% { background-position: 24px 0; }
         }
         @keyframes flowAnimationVerticalTopToBottom {
             0% { background-position: 0 0; }
-            100% { background-position: 0 20px; }
+            100% { background-position: 0 24px; }
         }
          @keyframes flowAnimationVerticalBottomToTop {
-            0% { background-position: 0 20px; }
+            0% { background-position: 0 24px; }
             100% { background-position: 0 0; }
         }
         /* NEW: Keyframes for Node Glow */
         @keyframes pulseNodeGlow {
-            0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } /* Light blue glow */
-            50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }
+            0%, 100% { box-shadow: 0 0 10px 3px rgba(96, 165, 250, 0.5), 0 0 3px 1px rgba(96, 165, 250, 0.7) inset; } /* Light blue glow + subtle inner glow */
+            50% { box-shadow: 0 0 18px 5px rgba(96, 165, 250, 0.6), 0 0 5px 2px rgba(96, 165, 250, 0.8) inset; }
+        }
+        /* Subtle floating animation for logo cloud */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
         }
 
         .line {
@@ -185,50 +200,69 @@
         }
         .node-container:hover .popup {
             display: block;
+            opacity: 1; /* Fade in */
         }
 
         /* --- 4. Logo Cloud Styles --- */
         #logo-cloud-wrapper .logo-container {
             position: relative;
-            width: 22vw;
-            height: 35vh;
-            max-width: 800px;
-            max-height: 500px;
+            width: 24vw; /* Slightly larger */
+            height: 40vh;
+            max-width: 850px;
+            max-height: 550px;
             margin: 2rem auto;
         }
         #logo-cloud-wrapper .logo-card {
             position: absolute;
-            background-color: #374151; /* Darker card */
+            background-color: rgba(55, 65, 81, 0.8); /* Gray-700 with transparency */
             border-radius: 0.75rem;
             padding: 1rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+            box-shadow: 0 5px 10px -1px rgb(0 0 0 / 0.4), 0 3px 6px -2px rgb(0 0 0 / 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 4rem;
-            height: 4rem;
+            width: 4.5rem; /* Slightly larger cards */
+            height: 4.5rem;
             z-index: 1;
-             transition: transform 0.2s ease-in-out;
+            transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+            border: 1px solid #4b5563; /* Subtle border */
+            /* Apply subtle floating animation with variation */
+            animation: float 6s ease-in-out infinite;
         }
-         #logo-cloud-wrapper .logo-card:hover {
-             transform: scale(1.1);
-         }
+        /* Vary animation delay for a more natural cloud effect */
+        #logo-cloud-wrapper #splunk { animation-delay: 0s; }
+        #logo-cloud-wrapper #pagerduty { animation-delay: -1s; }
+        #logo-cloud-wrapper #azure { animation-delay: -2s; }
+        #logo-cloud-wrapper #databricks { animation-delay: -3s; }
+        #logo-cloud-wrapper #confluence { animation-delay: -4s; }
+        #logo-cloud-wrapper #google-drive { animation-delay: -0.5s; }
+        #logo-cloud-wrapper #github { animation-delay: -1.5s; }
+        #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
+
+        #logo-cloud-wrapper .logo-card:hover {
+            transform: scale(1.15) translateY(-8px); /* Enhanced hover effect */
+            box-shadow: 0 8px 20px -1px rgb(0 0 0 / 0.5), 0 5px 10px -2px rgb(0 0 0 / 0.5);
+            z-index: 2; /* Bring hovered card to front */
+            animation-play-state: paused; /* Pause float on hover */
+        }
         #logo-cloud-wrapper .logo-icon {
-            font-size: 1.75rem;
-            color: #d1d5db; /* Lighter default icon color */
+            font-size: 2rem; /* Larger icons */
+            color: #d1d5db;
+            transition: color 0.2s ease-in-out;
         }
-        #logo-cloud-wrapper .fa-github { color: #f3f4f6; }
-        #logo-cloud-wrapper .fa-slack { color: #e0a0e5; }
-        #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; }
-        #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; }
-        #logo-cloud-wrapper .fa-cloud { color: #76b8e4; }
-        #logo-cloud-wrapper .fa-server { color: #f7be8f; }
-        #logo-cloud-wrapper .fa-bell { color: #74d699; }
-        #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
+        #logo-cloud-wrapper .fa-github { color: #f8fafc; }
+        #logo-cloud-wrapper .fa-slack { color: #e9a4ef; }
+        #logo-cloud-wrapper .fa-google-drive { color: #90bcf9; }
+        #logo-cloud-wrapper .fa-confluence { color: #adccea; }
+        #logo-cloud-wrapper .fa-cloud { color: #80c0e8; }
+        #logo-cloud-wrapper .fa-server { color: #f8c498; }
+        #logo-cloud-wrapper .fa-bell { color: #7ee0a2; }
+        #logo-cloud-wrapper .fa-cubes { color: #ff9a8c; }
+
         #logo-cloud-wrapper #splunk { top: 10%; left: 20%; }
         #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
         #logo-cloud-wrapper #azure { top: 70%; left: 25%; }
-        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
+        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; transform: translateX(-50%); } /* Center top */
         #logo-cloud-wrapper #confluence { top: 25%; left: 75%; }
         #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; }
         #logo-cloud-wrapper #github { top: -5%; left: 85%; }
@@ -289,10 +323,20 @@
                 align-items: center;
             }
             .sources-section, .outcomes-section {
-                width: 90%;
-                margin-bottom: 2rem;
+                width: 100%; /* Full width */
+                margin-bottom: 1.5rem;
+                padding: 1rem; /* Consistent padding */
+                backdrop-filter: none; /* Remove blur on mobile if performance is concern */
             }
             .sources-section { order: 1; }
+            .diagram-section {
+                order: 2; /* Diagram between sources and outcomes */
+                width: 100%;
+                height: auto; /* Let content dictate height */
+                padding: 1.5rem 0;
+                min-height: auto; /* Remove min-height */
+                position: relative; /* Needed for absolute positioning if lines were shown */
+            }
             .outcomes-section { order: 2; }
             .diagram-section {
                 width: 100%;
