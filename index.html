@@ -28,12 +28,12 @@
         }
 
         .sources-section {
-             background-color: #212530; /* Darker Gray (Gray-800) */
-             /*border: 1px solid #374151; /* Gray-700 border */
-             
+             background-color: #1f2937; /* Darker Gray (Gray-800) */
+             /* border: 1px solid #374151; /* Gray-700 border */
+             /* Removed backdrop-filter */
         }
         .outcomes-section {
-            /*background-color: #1f2937;   /*Darker Gray (Gray-800) */
+            background-color: #1f2937;   /*Darker Gray (Gray-800) */
             /* Removed border and backdrop-filter to match original */
         }
         .diagram-section {
@@ -42,13 +42,24 @@
 
         /* --- 3. Diagram Component Styles --- */
 
-        /* Keyframes for moving block with trail animation */
-       
+        /* NEW: Keyframes for moving dots animation */
+        @keyframes moveDotsLeftToRight {
+            0% { background-position: 0 center; }
+            100% { background-position: 30px center; } /* Adjust '30px' to control speed/spacing */
+        }
+        @keyframes moveDotsTopToBottom {
+            0% { background-position: center 0; }
+            100% { background-position: center 30px; } /* Adjust '30px' to control speed/spacing */
+        }
+         @keyframes moveDotsBottomToTop {
+             0% { background-position: center 30px; }
+             100% { background-position: center 0; }
+         }
 
-        /* Keyframes for Node Glow (from original) - BASE GLOW */
+        /* Keyframes for Node Glow (from original) */
         @keyframes pulseNodeGlow {
-            0%, 50% { box-shadow: 0 0 5px 1px rgba(96, 130, 250, 0.2); } /* Reduced intensity */
-            50% { box-shadow: 0 0 6px 1px rgba(96, 134, 250, 0.2); } /* Reduced intensity */
+            0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } /* Light blue glow */
+            50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }
         }
         /* Subtle floating animation for logo cloud */
         @keyframes float {
@@ -62,27 +73,53 @@
             position: absolute;
             transform-origin: 0 0;
             z-index: 0;
-            /* Base line color - darker gray */
+            /* Base line color - slightly darker gray for contrast with dots */
             background-color: #6b7280; /* Gray-500 */
-            overflow: hidden; /* Important to clip the gradient */
-            border-radius: 2px; /* Adjusted radius for thinner line */
+            overflow: hidden;
+            border-radius: 3px; /* from original */
         }
-        .line::after { /* Animated block with trail element */
-            content: none;
-            
+        .line::after { /* Animated dots element */
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            /* Repeating radial gradient for dots */
+            background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1.5px); /* Light gray dots */
+            background-repeat: repeat;
+            background-size: 30px 30px; /* Spacing of the dots - adjust as needed */
+            animation: moveDotsLeftToRight 1s linear infinite; /* Apply horizontal dot animation */
+            opacity: 0.8; /* Adjust opacity if needed */
         }
 
         .line-horizontal {
-            height: 2px; /* Made thinner */
+            height: 4px; /* Thickness - from original */
         }
+         .line-horizontal::after {
+             background-size: 30px 4px; /* Adjust size for horizontal line height */
+             animation-name: moveDotsLeftToRight;
+         }
 
         .line-vertical {
-            width: 2px; /* Made thinner */
+            width: 4px; /* Thickness - from original */
         }
+        .line-vertical::after {
+            background-size: 4px 30px; /* Adjust size for vertical line width */
+            animation-name: moveDotsTopToBottom; /* Default vertical animation */
+            animation-duration: 1s; /* Match duration */
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        /* Specific animation direction for lines flowing upwards */
+         .line-vertical.flow-up::after {
+             animation-name: moveDotsBottomToTop;
+         }
+         /* Specific animation direction for lines flowing downwards (redundant but explicit) */
+         .line-vertical.flow-down::after {
+             animation-name: moveDotsTopToBottom;
+         }
 
 
-
-        /* Nodes (Using original styles + modifications for activation) */
+        /* Nodes (Using original styles) */
         .node-container {
             position: absolute;
             z-index: 1;
@@ -97,14 +134,10 @@
             height: 80px;
             object-fit: cover;
             display: block;
-            /* Added transition for smooth activation effect */
-            transition: transform 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
+            transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
             margin-bottom: 4px;
             border-radius: 50%;
-            /* Base glow animation */
             animation: pulseNodeGlow 3s infinite ease-in-out;
-            /* Base shadow - slightly less intense than pulse peak */
-            box-shadow: 0 0 4px 1px rgba(96, 165, 250, 0.2);
         }
         .node-label {
             font-size: 0.8rem;
@@ -112,37 +145,13 @@
             color: #e5e7eb;
             text-align: center;
             margin-top: 2px;
-            transition: color 0.3s ease-in-out; /* Smooth color transition */
         }
-
-        /* Style for the currently active node */
-        .node-active .node-image {
-            /* Override base animation */
-            animation: none;
-            /* Apply a stronger, brighter glow */
-            box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.9), /* Bright white outer glow */
-                        0 0 10px 4px rgba(96, 165, 250, 0.7); /* Inner blue glow */
-            transform: scale(1.15); /* Slightly larger when active */
-        }
-         .node-active .node-label {
-             color: #ffffff; /* Brighter label when active */
-             font-weight: 600;
-         }
-
 
         .node-container:hover .node-image {
              transform: scale(1.1);
-             /* Keep base glow animation paused on hover if not active */
-             /* animation-play-state: paused; */
+             animation-play-state: paused; /* Pause node glow too */
              box-shadow: 0 0 20px 5px rgba(96, 165, 250, 0.7);
          }
-         /* Ensure hover doesn't override active state */
-         .node-active:hover .node-image {
-             transform: scale(1.15); /* Keep active scale */
-             box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.9),
-                         0 0 10px 4px rgba(96, 165, 250, 0.7); /* Keep active glow */
-         }
-
 
         /* Popups (Using original styles) */
         .popup {
@@ -363,22 +372,13 @@
                   margin-bottom: 0.5rem;
                   width: 70px;
                   height: 70px;
-                  animation: none; /* Disable base glow on mobile */
-                  box-shadow: none; /* Remove base shadow on mobile */
-             }
-             /* Remove active state glow on mobile for simplicity */
-             .node-active .node-image {
-                 box-shadow: none;
-                 transform: scale(1.05); /* Can keep a subtle scale */
+                  animation: none;
              }
              .node-label {
                  color: #d1d5db;
                  margin-top: 0;
              }
-             .node-active .node-label {
-                 color: #f0f0f0; /* Slightly brighter label */
-             }
-            .line { display: none; } /* Hide lines on mobile */
+            .line { display: none; }
             .popup {
                 position: relative;
                 display: block;
@@ -435,13 +435,13 @@
         <div
             class="diagram-section w-full md:w-1/3 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
             <div class="diagram-content relative w-full h-full">
-                <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 120px);"></div>
-                <div class="line line-horizontal" style="top: 50%; left: calc(0% + 130px); width: calc(150% - (50% + 40px));"></div>
-                <div class="line line-vertical" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
-                <div class="line line-vertical" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
-                <div class="line line-vertical" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
+                <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 90px);"></div>
+                <div class="line line-horizontal" style="top: 50%; left: calc(0% + 120px); width: calc(140% - (50% + 40px));"></div>
+                <div class="line line-vertical flow-up" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
+                <div class="line line-vertical flow-down" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
+                <div class="line line-vertical flow-down" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
 
-                <div id="node-atlas" class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
+                <div class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/0ya7Fj7.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';"
                           alt="Atlas Icon (Shield)"
@@ -452,7 +452,7 @@
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div id="node-merlin" class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px); width: 90px; height: auto;"> <img class="node-image"
+                 <div class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px); width: 90px; height: auto;"> <img class="node-image"
                          src="https://imgur.com/QyrDXOG.png"
                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/88a0f2/FFFFFF?text=Wizard';"
                          alt="Merlin Icon (Wizard)" title="Merlin: Correlation & Pattern Analysis">
@@ -462,7 +462,7 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div id="node-argus" class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: auto;"> <img class="node-image"
+                 <div class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/xMcN4Yw.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Owl';"
                           alt="Argus Icon (Owl)" title="Argus: Triaging & Root Cause Analysis">
@@ -472,7 +472,7 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div id="node-hephaestus" class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 90px; height: auto;"> <img class="node-image"
+                 <div class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 90px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/7QbiKPT.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Dwarf';"
                           alt="Hephaestus Icon (Dwarf/Builder)" title="Hephaestus: Recommended Actions & Updates">
@@ -532,69 +532,6 @@
                  }
              });
          });
-
-         // --- Node Activation Logic ---
-         document.addEventListener('DOMContentLoaded', () => {
-            const atlasNode = document.getElementById('node-atlas');
-            const merlinNode = document.getElementById('node-merlin');
-            const argusNode = document.getElementById('node-argus');
-            const hephaestusNode = document.getElementById('node-hephaestus');
-
-            const nodes = [atlasNode, merlinNode, argusNode, hephaestusNode]; // Simple array for now
-            const sequence = [
-                { nodes: [atlasNode], duration: 1500 },         // Atlas active for 1.5s
-                { nodes: [merlinNode, argusNode], duration: 1500 }, // Merlin & Argus active for 1.5s
-                { nodes: [hephaestusNode], duration: 1500 },    // Hephaestus active for 1.5s
-            ];
-            let currentStep = -1; // Start before the first step
-            let activeTimeout = null;
-
-            function activateStep(stepIndex) {
-                // Deactivate previous nodes
-                if (currentStep !== -1) {
-                    sequence[currentStep].nodes.forEach(node => {
-                        if (node) node.classList.remove('node-active');
-                    });
-                }
-
-                // Activate current nodes
-                currentStep = stepIndex;
-                if (currentStep !== -1) {
-                    const step = sequence[currentStep];
-                    step.nodes.forEach(node => {
-                        if (node) node.classList.add('node-active');
-                    });
-
-                    // Schedule the next step
-                    activeTimeout = setTimeout(() => {
-                        const nextStep = (currentStep + 1) % sequence.length;
-                        activateStep(nextStep);
-                    }, step.duration);
-                } else {
-                     // Initial call or reset - start sequence after a short delay
-                     activeTimeout = setTimeout(() => activateStep(0), 500);
-                }
-            }
-
-             // Start the sequence only on larger screens
-             if (window.innerWidth >= 768) {
-                 activateStep(-1); // Start the activation loop
-             }
-
-             // Optional: Re-evaluate on resize
-             window.addEventListener('resize', () => {
-                 if (window.innerWidth < 768) {
-                     // If screen becomes small, clear timeouts and remove active classes
-                     clearTimeout(activeTimeout);
-                     nodes.forEach(node => node?.classList.remove('node-active'));
-                     currentStep = -1; // Reset sequence
-                 } else if (currentStep === -1) {
-                     // If screen becomes large and sequence isn't running, start it
-                     activateStep(-1);
-                 }
-             });
-         });
-
     </script>
 
 </body>
