@@ -15,111 +15,142 @@
         /* --- 1. General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #1a202c 0%, #111827 100%);
-            color: #e5e7eb; /* Lighter default text (Gray-200) */
+            /* Using the background from your original code */
+            background-color: #111827; /* Dark Background (Gray-900) */
+            color: #d1d5db; /* Default light text (Gray-300) */
             overflow-x: hidden;
-            min-height: 100vh; /* Ensure gradient covers full height */
+            /* Removed min-height to match original */
         }
 
         /* --- 2. Layout Styles --- */
         .main-container {
-            padding-top: 2rem;
-           padding-bottom: 4rem;
+            /* Kept original padding/gap */
         }
 
         .sources-section {
-             background-color: #1f2937; /* Darker Gray (Gray-800) */
-             backdrop-filter: blur(5px); /* Frosted glass effect */
+             background-color: #212530; /* Darker Gray (Gray-800) */
+             /*border: 1px solid #374151; /* Gray-700 border */
+             
         }
         .outcomes-section {
-            background-color: #1f2937;   /*Darker Gray (Gray-800) */
+            /*background-color: #1f2937;   /*Darker Gray (Gray-800) */
+            /* Removed border and backdrop-filter to match original */
         }
         .diagram-section {
-            /* Ensure it aligns well vertically */
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            /* Kept original */
         }
 
         /* --- 3. Diagram Component Styles --- */
 
-        /* Connecting Lines - Animated Dashed Style */
-        @keyframes flowAnimationHorizontalLeftToRight {
-            0% { background-position: 0 0; }
-            100% { background-position: 24px 0; }
+        /* Keyframes for moving block with trail animation */
+        @keyframes moveTrailLeftToRight {
+            0% { background-position: -150% 0; } /* Start gradient off-screen left */
+            100% { background-position: 150% 0; } /* Move gradient off-screen right */
         }
-        @keyframes flowAnimationVerticalTopToBottom {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 24px; }
+        @keyframes moveTrailTopToBottom {
+            0% { background-position: 0 -150%; } /* Start gradient off-screen top */
+            100% { background-position: 0 150%; } /* Move gradient off-screen bottom */
         }
-         @keyframes flowAnimationVerticalBottomToTop {
-            0% { background-position: 0 24px; }
-            100% { background-position: 0 0; }
-        }
-        /* NEW: Keyframes for Node Glow */
+         @keyframes moveTrailBottomToTop {
+             0% { background-position: 0 150%; } /* Start gradient off-screen bottom */
+             100% { background-position: 0 -150%; } /* Move gradient off-screen top */
+         }
+
+        /* Keyframes for Node Glow (from original) - BASE GLOW */
         @keyframes pulseNodeGlow {
-            0%, 100% { box-shadow: 0 0 10px 3px rgba(96, 165, 250, 0.5), 0 0 3px 1px rgba(96, 165, 250, 0.7) inset; } /* Light blue glow + subtle inner glow */
-            50% { box-shadow: 0 0 18px 5px rgba(96, 165, 250, 0.6), 0 0 5px 2px rgba(96, 165, 250, 0.8) inset; }
+            0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } /* Light blue glow */
+            50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }
         }
         /* Subtle floating animation for logo cloud */
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
+            50% { transform: translateY(-5px); }
             100% { transform: translateY(0px); }
         }
 
+        /* Line Styles */
         .line {
             position: absolute;
             transform-origin: 0 0;
             z-index: 0;
-            background-color: #9ca3af; /* Base color (Gray-400) */
-            overflow: hidden;
-            border-radius: 3px;
+            /* Base line color - darker gray */
+            background-color: #6b7280; /* Gray-500 */
+            overflow: hidden; /* Important to clip the gradient */
+            border-radius: 2px; /* Adjusted radius for thinner line */
         }
-        .line::after { /* Animated flow element */
+        .line::after { /* Animated block with trail element */
             content: '';
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-             background-image: repeating-linear-gradient(
-                 90deg,
-                 #1f2937, /* Match darker panel background */
-                 #1f2937 10px,
-                 transparent 10px,
-                 transparent 20px
-             );
-            background-size: 20px 100%;
-            animation: flowAnimationHorizontalLeftToRight 0.5s linear infinite;
+            /* Gradient for the moving block with trail effect - light blue */
+            background-image: linear-gradient(
+                to left, /* Gradient direction creates the trail */
+                rgba(191, 219, 254, 0.9), /* Solid block color (blue-200) */
+                rgba(191, 219, 254, 0.9) 20%, /* Block length (adjust %) */
+                rgba(191, 219, 254, 0) 80%, /* Fade out (adjust %) */
+                transparent 100%
+            );
+            background-repeat: no-repeat;
+            /* Size of the gradient - needs to be wider/taller than the line to move across */
+            background-size: 200% 100%; /* Adjust size based on desired trail length/speed */
+            animation: moveTrailLeftToRight 2s linear infinite; /* Apply horizontal animation */
+            opacity: 0.95;
         }
 
         .line-horizontal {
-            height: 4px; /* Thickness */
+            height: 2px; /* Made thinner */
         }
-        /* .line-horizontal::after {} */
+         .line-horizontal::after {
+             background-size: 200% 100%; /* Adjust size for horizontal */
+             animation-name: moveTrailLeftToRight;
+         }
 
         .line-vertical {
-            width: 4px; /* Thickness */
+            width: 2px; /* Made thinner */
         }
         .line-vertical::after {
-             background-image: repeating-linear-gradient(
-                 0deg,
-                 #1f2937, /* Match darker panel background */
-                 #1f2937 10px,
-                 transparent 10px,
-                 transparent 20px
-             );
-             background-size: 100% 20px;
-             animation-name: none;
+            /* Vertical gradient with trail */
+             background-image: linear-gradient(
+                to top, /* Trail goes downwards */
+                rgba(191, 219, 254, 0.9),
+                rgba(191, 219, 254, 0.9) 20%,
+                rgba(191, 219, 254, 0) 80%,
+                transparent 100%
+            );
+            background-size: 100% 200%; /* Adjust size for vertical */
+            animation-name: moveTrailTopToBottom; /* Default vertical animation */
+            animation-duration: 2s; /* Match duration */
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
         }
-        .line-vertical.flow-down::after {
-             animation-name: flowAnimationVerticalTopToBottom;
-        }
+        /* Specific animation direction for lines flowing upwards */
          .line-vertical.flow-up::after {
-             animation-name: flowAnimationVerticalBottomToTop;
-        }
+             /* Gradient needs to point downwards for upward trail */
+             background-image: linear-gradient(
+                to bottom, /* Trail goes upwards */
+                rgba(191, 219, 254, 0.9),
+                rgba(191, 219, 254, 0.9) 20%,
+                rgba(191, 219, 254, 0) 80%,
+                transparent 100%
+            );
+             animation-name: moveTrailBottomToTop;
+         }
+         /* Specific animation direction for lines flowing downwards */
+         .line-vertical.flow-down::after {
+             /* Gradient needs to point upwards for downward trail */
+             background-image: linear-gradient(
+                to top, /* Trail goes downwards */
+                rgba(191, 219, 254, 0.9),
+                rgba(191, 219, 254, 0.9) 20%,
+                rgba(191, 219, 254, 0) 80%,
+                transparent 100%
+            );
+             animation-name: moveTrailTopToBottom;
+         }
 
 
-        /* Nodes */
+        /* Nodes (Using original styles + modifications for activation) */
         .node-container {
             position: absolute;
             z-index: 1;
@@ -134,38 +165,63 @@
             height: 80px;
             object-fit: cover;
             display: block;
-            transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out; /* Added box-shadow transition */
+            /* Added transition for smooth activation effect */
+            transition: transform 0.3s ease-in-out, box-shadow 0.4s ease-in-out;
             margin-bottom: 4px;
-            border-radius: 50%; /* Added border-radius for glow */
-            /* Apply pulsing animation */
+            border-radius: 50%;
+            /* Base glow animation */
             animation: pulseNodeGlow 3s infinite ease-in-out;
+            /* Base shadow - slightly less intense than pulse peak */
+             box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4);
         }
-        .node-label { /* NEW Style for labels */
-            font-size: 0.8rem; /* Smaller text */
-            font-weight: 500; /* Medium weight */
-            color: #e5e7eb; /* Light Gray */
+        .node-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #e5e7eb;
             text-align: center;
-            margin-top: 2px; /* Space above label */
+            margin-top: 2px;
+            transition: color 0.3s ease-in-out; /* Smooth color transition */
         }
+
+        /* Style for the currently active node */
+        .node-active .node-image {
+            /* Override base animation */
+            animation: none;
+            /* Apply a stronger, brighter glow */
+            box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.9), /* Bright white outer glow */
+                        0 0 10px 4px rgba(96, 165, 250, 0.7); /* Inner blue glow */
+            transform: scale(1.15); /* Slightly larger when active */
+        }
+         .node-active .node-label {
+             color: #ffffff; /* Brighter label when active */
+             font-weight: 600;
+         }
+
 
         .node-container:hover .node-image {
              transform: scale(1.1);
-             /* Slightly enhance glow on hover, stop pulsing */
-             animation-play-state: paused; /* Pause pulsing on hover */
+             /* Keep base glow animation paused on hover if not active */
+             /* animation-play-state: paused; */
              box-shadow: 0 0 20px 5px rgba(96, 165, 250, 0.7);
          }
+         /* Ensure hover doesn't override active state */
+         .node-active:hover .node-image {
+             transform: scale(1.15); /* Keep active scale */
+             box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.9),
+                         0 0 10px 4px rgba(96, 165, 250, 0.7); /* Keep active glow */
+         }
 
-        /* Popups */
+
+        /* Popups (Using original styles) */
         .popup {
             display: none;
             position: absolute;
-            /* Adjust bottom/top based on label presence */
-            bottom: calc(100% + 15px); /* Increased gap */
+            bottom: calc(100% + 15px);
             left: 50%;
             transform: translateX(-50%);
             width: 250px;
-            background-color: #374151; /* Darker popup bg */
-            color: #d1d5db; /* Lighter text */
+            background-color: #374151;
+            color: #d1d5db;
             padding: 12px;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
@@ -174,7 +230,7 @@
             z-index: 10;
             text-align: left;
             font-weight: normal;
-            border: 1px solid #4b5563; /* Gray-600 border */
+            border: 1px solid #4b5563;
         }
         .popup a { color: #60a5fa; }
         .popup a:hover { text-decoration: underline; }
@@ -187,49 +243,45 @@
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
-            border-color: #374151 transparent transparent transparent; /* Match popup bg */
+            border-color: #374151 transparent transparent transparent;
         }
         .popup-bottom {
             bottom: auto;
-            top: calc(100% + 15px); /* Increased gap */
+            top: calc(100% + 15px);
         }
         .popup-bottom::after {
             top: auto;
             bottom: 100%;
-            border-color: transparent transparent #374151 transparent; /* Match popup bg */
+            border-color: transparent transparent #374151 transparent;
         }
         .node-container:hover .popup {
             display: block;
-            opacity: 1; /* Fade in */
         }
 
-        /* --- 4. Logo Cloud Styles --- */
+        /* --- 4. Logo Cloud Styles (Using original styles + float animation) --- */
         #logo-cloud-wrapper .logo-container {
             position: relative;
-            width: 24vw; /* Slightly larger */
-            height: 40vh;
-            max-width: 850px;
-            max-height: 550px;
+            width: 22vw;
+            height: 35vh;
+            max-width: 800px;
+            max-height: 500px;
             margin: 2rem auto;
         }
         #logo-cloud-wrapper .logo-card {
             position: absolute;
-            background-color: rgba(55, 65, 81, 0.8); /* Gray-700 with transparency */
+            background-color: #374151; /* Darker card */
             border-radius: 0.75rem;
             padding: 1rem;
-            box-shadow: 0 5px 10px -1px rgb(0 0 0 / 0.4), 0 3px 6px -2px rgb(0 0 0 / 0.4);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 4.5rem; /* Slightly larger cards */
-            height: 4.5rem;
+            width: 4rem;
+            height: 4rem;
             z-index: 1;
-            transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-            border: 1px solid #4b5563; /* Subtle border */
-            /* Apply subtle floating animation with variation */
-            animation: float 6s ease-in-out infinite;
+             transition: transform 0.2s ease-in-out;
+             animation: float 6s ease-in-out infinite;
         }
-        /* Vary animation delay for a more natural cloud effect */
         #logo-cloud-wrapper #splunk { animation-delay: 0s; }
         #logo-cloud-wrapper #pagerduty { animation-delay: -1s; }
         #logo-cloud-wrapper #azure { animation-delay: -2s; }
@@ -239,30 +291,26 @@
         #logo-cloud-wrapper #github { animation-delay: -1.5s; }
         #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
 
-        #logo-cloud-wrapper .logo-card:hover {
-            transform: scale(1.15) translateY(-8px); /* Enhanced hover effect */
-            box-shadow: 0 8px 20px -1px rgb(0 0 0 / 0.5), 0 5px 10px -2px rgb(0 0 0 / 0.5);
-            z-index: 2; /* Bring hovered card to front */
-            animation-play-state: paused; /* Pause float on hover */
-        }
+         #logo-cloud-wrapper .logo-card:hover {
+             transform: scale(1.1);
+             animation-play-state: paused;
+         }
         #logo-cloud-wrapper .logo-icon {
-            font-size: 2rem; /* Larger icons */
+            font-size: 1.75rem;
             color: #d1d5db;
-            transition: color 0.2s ease-in-out;
         }
-        #logo-cloud-wrapper .fa-github { color: #f8fafc; }
-        #logo-cloud-wrapper .fa-slack { color: #e9a4ef; }
-        #logo-cloud-wrapper .fa-google-drive { color: #90bcf9; }
-        #logo-cloud-wrapper .fa-confluence { color: #adccea; }
-        #logo-cloud-wrapper .fa-cloud { color: #80c0e8; }
-        #logo-cloud-wrapper .fa-server { color: #f8c498; }
-        #logo-cloud-wrapper .fa-bell { color: #7ee0a2; }
-        #logo-cloud-wrapper .fa-cubes { color: #ff9a8c; }
-
+        #logo-cloud-wrapper .fa-github { color: #f3f4f6; }
+        #logo-cloud-wrapper .fa-slack { color: #e0a0e5; }
+        #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; }
+        #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; }
+        #logo-cloud-wrapper .fa-cloud { color: #76b8e4; }
+        #logo-cloud-wrapper .fa-server { color: #f7be8f; }
+        #logo-cloud-wrapper .fa-bell { color: #74d699; }
+        #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
         #logo-cloud-wrapper #splunk { top: 10%; left: 20%; }
         #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
         #logo-cloud-wrapper #azure { top: 70%; left: 25%; }
-        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; transform: translateX(-50%); } /* Center top */
+        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
         #logo-cloud-wrapper #confluence { top: 25%; left: 75%; }
         #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; }
         #logo-cloud-wrapper #github { top: -5%; left: 85%; }
@@ -273,12 +321,12 @@
             left: 0;
             width: 70%;
             height: 100%;
-            background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 70%); /* Dark fade */
+            background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 70%);
             pointer-events: none;
             z-index: 2;
         }
 
-        /* --- 5. Carousel Styles --- */
+        /* --- 5. Carousel Styles (Using original styles) --- */
         #carousel {
             overflow: hidden;
             height: 150px;
@@ -316,27 +364,17 @@
             font-size: 1rem;
         }
 
-        /* --- 6. Responsive Styles --- */
+        /* --- 6. Responsive Styles (Using original styles) --- */
         @media (max-width: 767.98px) {
             .main-container {
                 flex-direction: column;
                 align-items: center;
             }
             .sources-section, .outcomes-section {
-                width: 100%; /* Full width */
-                margin-bottom: 1.5rem;
-                padding: 1rem; /* Consistent padding */
-                backdrop-filter: none; /* Remove blur on mobile if performance is concern */
+                width: 90%;
+                margin-bottom: 2rem;
             }
             .sources-section { order: 1; }
-            .diagram-section {
-                order: 2; /* Diagram between sources and outcomes */
-                width: 100%;
-                height: auto; /* Let content dictate height */
-                padding: 1.5rem 0;
-                min-height: auto; /* Remove min-height */
-                position: relative; /* Needed for absolute positioning if lines were shown */
-            }
             .outcomes-section { order: 2; }
             .diagram-section {
                 width: 100%;
@@ -354,7 +392,11 @@
                 width: 3.5rem;
                 height: 3.5rem;
                 padding: 0.75rem;
+                animation: none;
             }
+             #logo-cloud-wrapper .logo-card:hover {
+                 transform: scale(1.1);
+             }
             #logo-cloud-wrapper .logo-icon {
                 font-size: 1.5rem;
             }
@@ -389,12 +431,22 @@
                   margin-bottom: 0.5rem;
                   width: 70px;
                   height: 70px;
+                  animation: none; /* Disable base glow on mobile */
+                  box-shadow: none; /* Remove base shadow on mobile */
              }
-             .node-label { /* Ensure label is visible on mobile */
+             /* Remove active state glow on mobile for simplicity */
+             .node-active .node-image {
+                 box-shadow: none;
+                 transform: scale(1.05); /* Can keep a subtle scale */
+             }
+             .node-label {
                  color: #d1d5db;
-                 margin-top: 0; /* Adjust spacing if needed */
+                 margin-top: 0;
              }
-            .line { display: none; }
+             .node-active .node-label {
+                 color: #f0f0f0; /* Slightly brighter label */
+             }
+            .line { display: none; } /* Hide lines on mobile */
             .popup {
                 position: relative;
                 display: block;
@@ -418,6 +470,7 @@
             #carousel { height: 150px; }
             .carousel-list li { height: 50px; }
         }
+
     </style>
 </head>
 
@@ -450,12 +503,13 @@
         <div
             class="diagram-section w-full md:w-1/3 order-3 md:order-2 flex justify-center items-center relative min-h-[400px] md:min-h-[300px]">
             <div class="diagram-content relative w-full h-full">
-                <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 90px);"></div>
-                <div class="line line-horizontal" style="top: 50%; left: calc(0% + 120px); width: calc(140% - (50% + 40px));"></div>
+                <div class="line line-horizontal" style="top: 50%; left: 0%; width: calc(50% - 120px);"></div>
+                <div class="line line-horizontal" style="top: 50%; left: calc(0% + 130px); width: calc(150% - (50% + 40px));"></div>
                 <div class="line line-vertical flow-up" style="left: 75%; top: calc(50% - 100px); height: 100px;"></div>
                 <div class="line line-vertical flow-down" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
                 <div class="line line-vertical flow-down" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
-                <div class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
+
+                <div id="node-atlas" class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/0ya7Fj7.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';"
                           alt="Atlas Icon (Shield)"
@@ -466,7 +520,7 @@
                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px); width: 90px; height: auto;"> <img class="node-image"
+                 <div id="node-merlin" class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px); width: 90px; height: auto;"> <img class="node-image"
                          src="https://imgur.com/QyrDXOG.png"
                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/88a0f2/FFFFFF?text=Wizard';"
                          alt="Merlin Icon (Wizard)" title="Merlin: Correlation & Pattern Analysis">
@@ -476,7 +530,7 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: auto;"> <img class="node-image"
+                 <div id="node-argus" class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/xMcN4Yw.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Owl';"
                           alt="Argus Icon (Owl)" title="Argus: Triaging & Root Cause Analysis">
@@ -486,7 +540,7 @@
                          <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 90px; height: auto;"> <img class="node-image"
+                 <div id="node-hephaestus" class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 90px; height: auto;"> <img class="node-image"
                           src="https://imgur.com/7QbiKPT.png"
                           onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Dwarf';"
                           alt="Hephaestus Icon (Dwarf/Builder)" title="Hephaestus: Recommended Actions & Updates">
@@ -509,7 +563,7 @@
     </div>
 
     <script>
-        // --- Carousel Logic ---
+        // --- Carousel Logic (Using original script) ---
         document.addEventListener('DOMContentLoaded', () => {
             const phrases = ["Faster Incident Resolution", "Enhanced Operational Efficiency", "Improved System Reliability", "Reduced Operational Costs", "Context-aware incident correlation", "Real-time on-call guidance", "Predictive log analytics", "Anomaly detection", "Root cause analysis"];
             const rotationInterval = 3500; const transitionDuration = 800; const itemHeight = 50;
@@ -530,7 +584,7 @@
             if (totalOriginalItems >= 3) { startCarousel(); carouselContainer.addEventListener('mouseenter', stopCarousel); carouselContainer.addEventListener('mouseleave', startCarousel); }
         });
 
-         // --- Popup Position Logic ---
+         // --- Popup Position Logic (Using original script) ---
          document.querySelectorAll('.node-container').forEach(container => {
              container.addEventListener('mouseenter', () => {
                  if (window.innerWidth < 768) return;
@@ -546,6 +600,69 @@
                  }
              });
          });
+
+         // --- Node Activation Logic ---
+         document.addEventListener('DOMContentLoaded', () => {
+            const atlasNode = document.getElementById('node-atlas');
+            const merlinNode = document.getElementById('node-merlin');
+            const argusNode = document.getElementById('node-argus');
+            const hephaestusNode = document.getElementById('node-hephaestus');
+
+            const nodes = [atlasNode, merlinNode, argusNode, hephaestusNode]; // Simple array for now
+            const sequence = [
+                { nodes: [atlasNode], duration: 1500 },         // Atlas active for 1.5s
+                { nodes: [merlinNode, argusNode], duration: 1500 }, // Merlin & Argus active for 1.5s
+                { nodes: [hephaestusNode], duration: 1500 },    // Hephaestus active for 1.5s
+            ];
+            let currentStep = -1; // Start before the first step
+            let activeTimeout = null;
+
+            function activateStep(stepIndex) {
+                // Deactivate previous nodes
+                if (currentStep !== -1) {
+                    sequence[currentStep].nodes.forEach(node => {
+                        if (node) node.classList.remove('node-active');
+                    });
+                }
+
+                // Activate current nodes
+                currentStep = stepIndex;
+                if (currentStep !== -1) {
+                    const step = sequence[currentStep];
+                    step.nodes.forEach(node => {
+                        if (node) node.classList.add('node-active');
+                    });
+
+                    // Schedule the next step
+                    activeTimeout = setTimeout(() => {
+                        const nextStep = (currentStep + 1) % sequence.length;
+                        activateStep(nextStep);
+                    }, step.duration);
+                } else {
+                     // Initial call or reset - start sequence after a short delay
+                     activeTimeout = setTimeout(() => activateStep(0), 500);
+                }
+            }
+
+             // Start the sequence only on larger screens
+             if (window.innerWidth >= 768) {
+                 activateStep(-1); // Start the activation loop
+             }
+
+             // Optional: Re-evaluate on resize
+             window.addEventListener('resize', () => {
+                 if (window.innerWidth < 768) {
+                     // If screen becomes small, clear timeouts and remove active classes
+                     clearTimeout(activeTimeout);
+                     nodes.forEach(node => node?.classList.remove('node-active'));
+                     currentStep = -1; // Reset sequence
+                 } else if (currentStep === -1) {
+                     // If screen becomes large and sequence isn't running, start it
+                     activateStep(-1);
+                 }
+             });
+         });
+
     </script>
 
 </body>
