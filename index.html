@@ -128,12 +128,12 @@
           display: block !important; 
           opacity: 0; 
           transform: translate(-50%, 10px); 
-          animation: fadeInFlowPopup 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+          animation: fadeInFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
         }
         .flow-popup.flow-popup-hiding {
           opacity: 1; 
           transform: translate(-50%, 0px); 
-          animation: fadeOutFlowPopup 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+          animation: fadeOutFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
         }
 
         /* --- Logo Cloud & Carousel Styles (Original) --- */
@@ -310,8 +310,8 @@
                 }
             ];
 
-            const DISPLAY_DURATION = 3000; 
-            const ANIMATION_DURATION_JS = 700; // Corresponds to CSS animation duration for JS timeouts
+            const DISPLAY_DURATION = 8000; 
+            const ANIMATION_DURATION_JS = 5200; // Corresponds to CSS animation duration (1.2s)
             const DELAY_BETWEEN_POPUPS = 200;
 
             let currentFlowStepIndex = 0;
