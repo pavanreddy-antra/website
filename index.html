@@ -24,11 +24,11 @@
         .main-container {}
 
         .sources-section {
-             background-color: #1f2937; 
+            /* background-color: #1f2937; */
              position: relative; 
         }
         .outcomes-section {
-            background-color: #1f2937;  
+            /*background-color: #1f2937;  */
             position: relative; 
         }
         .diagram-section {}
@@ -74,8 +74,9 @@
             text-align: left;
             font-weight: normal;
             border: 1px solid #4b5563;
+            pointer-events: auto; /* Ensure popup can receive mouse events */
         }
-        .popup a { color: #60a5fa; } /* Original link color */
+        .popup a { color: #60a5fa; cursor: pointer; } /* Original link color & cursor */
         .popup a:hover { text-decoration: underline; }
 
         .popup::after { /* Arrow for original popups */
@@ -150,6 +151,69 @@
         .carousel-list li { height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; padding-left: 0.5rem; padding-right: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #9ca3af; opacity: 0.7; font-size: 0.875rem; font-weight: 400; transition: color 0.5s ease, opacity 0.5s ease, font-weight 0.5s ease, font-size 0.5s ease; }
         .carousel-list li.highlighted { color: #f9fafb; font-weight: 600; opacity: 1; font-size: 1rem; }
 
+        /* --- Modal Styles --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
+            display: none; /* Hidden by default */
+            align-items: center; justify-content: center;
+            z-index: 1000; /* High z-index */
+            padding: 1rem; /* Padding for smaller screens */
+        }
+        .modal-overlay.active {
+            display: flex; /* Show when active */
+        }
+        .modal-content {
+            background-color: #1f2937; /* Dark background for modal */
+            color: #d1d5db; /* Light text */
+            padding: 2rem;
+            border-radius: 0.75rem; /* Rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            max-width: 800px; /* Max width */
+            width: 90%; /* Responsive width */
+            max-height: 85vh; /* Max height */
+            overflow-y: auto; /* Scrollable content */
+            position: relative;
+            border: 1px solid #374151; /* Subtle border */
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 0.75rem; right: 0.75rem;
+            background: none; border: none;
+            font-size: 1.75rem; /* Larger close icon */
+            color: #9ca3af; /* Gray color */
+            cursor: pointer;
+            line-height: 1;
+            padding: 0.25rem;
+        }
+        .modal-close-button:hover {
+            color: #f3f4f6; /* Lighter gray on hover */
+        }
+        .modal-title {
+            font-size: 1.5rem; /* Larger title */
+            font-weight: 600;
+            color: #f9fafb; /* White title */
+            margin-bottom: 1.5rem;
+            padding-right: 2rem; /* Space for close button */
+        }
+        .modal-body h3 { /* Style for subtitles within the modal content */
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e5e7eb; /* Slightly lighter gray */
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .modal-body p, .modal-body li {
+            font-size: 0.95rem; /* Slightly larger base text */
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+        .modal-body ul {
+            list-style: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
         /* --- Responsive Styles --- */
         @media (max-width: 767.98px) {
             .main-container { flex-direction: column; align-items: center; }
@@ -183,6 +247,12 @@
             .flow-popup { display: none !important; }
 
             #carousel { height: 150px; } .carousel-list li { height: 50px; }
+
+            /* Modal adjustments for mobile */
+            .modal-content { width: 95%; padding: 1.5rem; max-height: 90vh; }
+            .modal-title { font-size: 1.25rem; margin-bottom: 1rem; }
+            .modal-body h3 { font-size: 1rem; }
+            .modal-body p, .modal-body li { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -227,8 +297,8 @@
                     <div class="node-label">Atlas</div> 
                     <div class="node-description">Data Ingestion & Enrichment</div>
                     <div class="popup" id="atlas-hover-popup"> <h3 class="font-semibold mb-1">Atlas</h3>
-                        <p>Streamline the preparation and transformation of diverse, unstructured data. ATLAS automates data crawling, extraction, cleansing, and structuring, ensuring high-quality, AI-ready datasets.</p>
-                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
+                        <p>Streamline the preparation and transformation of diverse, unstructured data...</p>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="atlas">Learn More</a>
                     </div>
                 </div>
                 <div id="merlin-node-container" class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px);">
@@ -236,8 +306,8 @@
                     <div class="node-label">Merlin</div> 
                     <div class="node-description">Correlation & Insights</div>
                     <div class="popup" id="merlin-hover-popup"> <h3 class="font-semibold mb-1">Merlin</h3>
-                        <p>Enhance the efficiency of on-call teams. Automatically correlate current issues with historical incident resolutions, integrated knowledge bases, and real-time actionable insights.</p>
-                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
+                        <p>Enhance the efficiency of on-call teams. Automatically correlate current issues...</p>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="merlin">Learn More</a>
                     </div>
                 </div>
                 <div id="argus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px);">
@@ -245,8 +315,8 @@
                     <div class="node-label">Argus</div> 
                     <div class="node-description">Anomaly Detection & RCA</div>
                     <div class="popup popup-bottom" id="argus-hover-popup"> <h3 class="font-semibold mb-1">Argus</h3>
-                        <p>Transform log management to proactive monitoring. Uses advanced ML for real-time anomaly detection, incident forecasting, and automated root cause analysis.</p>
-                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
+                        <p>Transform log management to proactive monitoring. Uses advanced ML...</p>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="argus">Learn More</a>
                     </div>
                 </div>
                 <div id="hephaestus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px);">
@@ -254,8 +324,8 @@
                     <div class="node-label">Hephaestus</div> 
                     <div class="node-description">Action & Automation</div>
                     <div class="popup popup-bottom" id="hephaestus-hover-popup"> <h3 class="font-semibold mb-1">Hephaestus</h3>
-                        <p>Optimize performance and cost efficiency in data environments. Proactively identifies bottlenecks and provides actionable recommendations.</p>
-                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
+                        <p>Optimize performance and cost efficiency in data environments...</p>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="hephaestus">Learn More</a>
                     </div>
                 </div>
                 </div>
@@ -268,8 +338,172 @@
             </div>
     </div>
 
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close-button">&times;</button>
+            <h2 id="modal-title" class="modal-title">Component Details</h2>
+            <div id="modal-body" class="modal-body">
+                </div>
+        </div>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Detailed Content for Modals ---
+            const detailedContent = {
+                merlin: {
+                    title: "Merlin (The AIOps Context Engine) by Techwish",
+                    content: `<h3>Executive Summary</h3>
+<p>Organizations that provide production support for enterprise applications or manage large data pipelines often face real-time challenges, where incidents demand immediate attention to prevent downtime or data loss. Support engineers are frequently under pressure to resolve these issues quickly, often scrambling to analyze multiple sources or applications, logs, and system alerts to diagnose and fix problems. This process can be complex and time-consuming, especially during peak operational hours or critical reporting windows.</p>
+<p>Merlin, TechWish’s advanced AIOps platform, solves this by equipping support teams with intelligent, context-specific insights. By correlating current issues with historical incidents, and integrating relevant code references, documentation and logs, Merlin streamlines troubleshooting, enabling engineers to identify and resolve issues swiftly and confidently.</p>
+<p>The solution can cater to broader enterprise IT operations, application support, and infrastructure monitoring, ensuring faster incident resolution and improved system reliability.</p>
+<h3>Why Traditional Approaches Fall Short</h3>
+<p>Modern incident response is often slowed down by these key challenges:</p>
+<ul>
+<li>Scattered Information: Critical data is scattered across tools, wikis, logs, and tickets, making it hard to find what's relevant.</li>
+<li>Inconsistent Responses: Similar issues are resolved differently depending on who’s on call, leading to inefficiencies.</li>
+<li>Reactive Troubleshooting: Teams spend more time investigating than solving, with no clear guidance in the moment of need.</li>
+</ul>
+<h3>How Merlin Helps Your Team</h3>
+<p>Merlin is built with a singular focus—enhancing the efficiency of on-call engineers. By delivering real-time suggestions and insights based on historical incident resolutions, source code, documentation, it transforms the incident resolution process from reactive to proactive. Engineers no longer need to dig through logs and past resolutions manually; Merlin brings relevant information directly to them, enabling faster and more informed decision-making.</p>
+<ul>
+<li>Historical Incident Correlation: Drawing from a knowledge base of past incidents and resolutions, Merlin correlates current issues with similar historical cases. This correlation gives on-call engineers a head start, as they can leverage past successful resolutions and avoid redundant troubleshooting efforts.</li>
+<li>Integrated Knowledge Base: Merlin includes an integrated vectorized knowledge base (maintained by our proprietary platform ATLAS) that connects relevant code references, documentation, and resolution guides. This knowledge base is accessible in real time to an LLM through AI search. By referencing past incidents, code documentation, and best practices, Merlin curates and delivers contextual information that aids in incident resolution.</li>
+<li>Near Real-Time, Actionable Recommendations : Merlin delivers clear, incident-specific guidance directly into ITSM platforms with citations and collaboration tools like Slack and Microsoft Teams. Recommendations are crafted using logs, prior tickets, code references, and best practices—enabling engineers to act immediately.</li>
+<li>Seamless Engineering Experience: Merlin provides continuous monitoring of the ITSM for incidents and automatically activates when new incidents arise.</li>
+</ul>
+<h3>Business Benefits</h3>
+<ul>
+<li>Reduces Time to Resolution</li>
+<li>Minimizes Downtime and Business Impact (SLA)</li>
+<li>Improves Consistency and Quality of Incident Response</li>
+<li>Preserves and Reuses Institutional Knowledge</li>
+</ul>
+<h3>Operational Highlights</h3>
+<ul>
+<li>95% of recommendations delivered in under 27.8 seconds.</li>
+<li>Adjustable precision with 99% relevance at optimal settings.</li>
+<li>Control the priority and blend of knowledge inputs—internal docs, tickets, external resources—for optimal relevance.</li>
+<li>Containerized, scalable, and deployable both on-prem and in the cloud.</li>
+</ul>`
+                },
+                argus: {
+                    title: "Argus (ML-based anomaly detection) by Techwish",
+                    content: `<h3>Executive Summary</h3>
+<p>Organizations running large-scale data pipelines, enterprise applications, and DevOps operations often struggle to manage the growing volume and complexity of operational logs. Traditional log analysis tends to be reactive and noisy, slowing down root cause analysis, overloading engineers with redundant alerts, and increasing system downtime.</p>
+<p>Argus, TechWish’s AI-powered log analysis platform, transforms reactive log management into proactive operational intelligence. Designed for easy integration, Argus enables teams to ingest logs from their existing platforms into a centralized ElasticSearch environment, where machine learning models detect anomalies, reduce alert noise, and provide actionable recommendations in real time. The result: earlier detection of critical issues, fewer unnecessary alerts, and more efficient engineering response.</p>
+<h3>Why Traditional Approaches Fall Short</h3>
+<p>Efficient system oversight and rapid incident resolution in complex enterprise environments are often crippled by these fundamental shortcomings:</p>
+<ul>
+<li>Siloed and Fragmented Logs: Logs are generated across diverse systems and are often siloed, unstructured, and spread out, hindering visibility and efficient troubleshooting.</li>
+<li>Alert Overload and Inefficient Prioritization: Engineers face an overwhelming number of alerts, many of which are redundant or low-priority, making it difficult to prioritize critical issues.</li>
+<li>Time-Consuming Manual Correlation: Correlating information manually is a lengthy process, and escalations rely more on individual experience than on intelligent automation.</li>
+</ul>
+<h3>How Argus Helps Your Team</h3>
+<p>Argus is designed with a clear focus—to streamline log monitoring by transforming it from a noisy, fragmented process into an intelligent system for clear operational insight. It ingests and analyzes logs from across your infrastructure, helping engineering teams cut through the noise to quickly understand system behavior and identify critical issues.</p>
+<ul>
+<li>Centralized Log Ingestion and Smart Processing: Argus simplifies log management by ingesting data from all your sources—databases, applications, APIs, and ITSM tools with the help of ATLAS. It then automatically parses, standardizes, and categorizes this log data, preparing it for efficient and accurate analysis.</li>
+<li>AI-Powered Anomaly Detection and Noise Reduction: Argus employs advanced ML and AI techniques to analyze your log data in real-time, identifying genuine anomalies and correlating events to help understand their origins. Its models excel at log clustering and noise reduction, significantly cutting down on low-value alerts so teams can focus on what truly matters.</li>
+<li>Prioritized Alerting with Essential Context: When critical issues are detected, Argus delivers focused alerts through your preferred channels (email, SMS, PagerDuty, ITSM). Each alert is enriched with relevant context from the logs, enabling engineers to quickly grasp the situation and respond efficiently without sifting through raw data.</li>
+<li>Continuous Improvement and Alert Refinement: Argus learns from resolved incidents and operational feedback. This closed-loop system continuously refines its models, improving detection accuracy and further reducing alert noise over time, ensuring operational knowledge contributes to ongoing efficiency.</li>
+</ul>
+<h3>Business Benefits</h3>
+<ul>
+<li>Accelerates Root Cause Analysis</li>
+<li>Reduces Alert Noise</li>
+<li>Improves Operational Visibility</li>
+<li>Enhances Security Posture</li>
+</ul>
+<h3>Operational Highlights</h3>
+<ul>
+<li>Detects >95% of high-impact anomalies within 30 seconds of log ingestion</li>
+<li>Reduces false positives and redundant alerts by up to 70%</li>
+<li>Cuts manual investigation time by 60–75% through automated cross-log analysis</li>
+<li>Predicts recurring failures with 85–90% accuracy, enabling preemptive action</li>
+<li>Enables >99.95% uptime for critical systems through proactive alerting</li>
+<li>Provides full-stack visibility with role-based insights for analysts and leads</li>
+</ul>`
+                },
+                atlas: {
+                    title: "ATLAS - Your Operational Map Builder (Automated Transformation and Loading for AI Solutions) by Techwish",
+                    content: `<h3>Executive Summary</h3>
+<p>Modern Artificial Intelligence (AI) and advanced analytics initiatives depend heavily on large volumes of high-quality, structured data. However, organizations often possess vast amounts of valuable information locked away in unstructured or semi-structured formats like web pages, PDFs, images, scanned documents, and diverse text files. Manually extracting, cleaning, and structuring this data is a significant bottleneck, consuming valuable time for data scientists and engineers and delaying critical AI and analytics projects.</p>
+<p>ATLAS, TechWish’s automated data transformation and loading platform, directly tackles this challenge. It streamlines the entire data preparation pipeline by automating the crawling, extraction, cleansing, transformation, and loading of unstructured and semi-structured sources. ATLAS delivers reliable, structured, analysis-ready datasets suitable for machine learning models, Natural Language Processing (NLP) tasks, vector databases, and enterprise Business Intelligence (BI) platforms, drastically reducing manual effort and accelerating time-to-insight.</p>
+<h3>Why Traditional Approaches Fall Short</h3>
+<p>Traditional data preparation for unstructured sources presents major difficulties:</p>
+<ul>
+<li>Data Preprocessing Overhead: Data teams spend an inordinate amount of time (often up to 80%) manually wrangling data instead of building models or deriving insights.</li>
+<li>AI Implementation Bottlenecks: Inconsistent, messy, or unstructured data is unusable for most AI models and analytics tools without extensive pre-processing, slowing down AI adoption.</li>
+<li>Complex Unstructured Data Onboarding: Scraping dynamic websites, parsing complex PDFs, or extracting text from images requires specialized tools and significant effort.</li>
+</ul>
+<h3>How ATLAS Helps Your Team</h3>
+<p>ATLAS provides an end-to-end automated solution for harnessing unstructured data:</p>
+<ul>
+<li>Versatile Source Ingestion: Supports a wide array of inputs including web pages (handling JavaScript, CAPTCHAs, proxies), PDFs, various document formats (DOCX, HTML), images, and text files from local storage or cloud repositories (AWS S3, Azure Blob, GCS, Dropbox).</li>
+<li>Intelligent Extraction and Transformation: Employs advanced techniques like built-in Optical Character Recognition (OCR) for images/scans, multiple strategies for document chunking (traditional, structural, AI-powered), and leverages LLMs for sophisticated text extraction, summarization, and translation. Allows users to define customizable schemas or use auto-inferred structures.</li>
+<li>Robust Data Cleansing and Enrichment: Includes features for cleaning raw extracted data, enforcing data quality rules, validating against schemas, and enriching data as needed before loading.</li>
+<li>Flexible Structured Loading: Transforms and routes processed data into various target systems, including traditional SQL databases (Azure SQL, PostgreSQL, Redshift, BigQuery), data lakes, data warehouses, and modern vector databases (e.g., Pinecone, Redis) crucial for AI applications like RAG and semantic search.</li>
+<li>Centralized Orchestration and Monitoring: Features an Admin Console for configuring pipelines, managing schemas, setting up transformations, and controlling access. Provides real-time dashboards for monitoring ingestion volume, success rates, data quality metrics, and system health, along with alerting capabilities.</li>
+</ul>
+<h3>Business Benefits</h3>
+<ul>
+<li>Unlocks Value from Unstructured Data</li>
+<li>Reduces Manual Effort in data preparation</li>
+<li>Accelerates AI and Analytics Deployment</li>
+<li>Centralizes institutional knowledge</li>
+</ul>
+<h3>Operational Highlights</h3>
+<ul>
+<li>Broad Unstructured Source Support: Ingests data from web pages, PDFs, Office docs, images, and major cloud storage platforms.</li>
+<li>Automated Intelligent Scraping: Handles dynamic content, JS rendering, CAPTCHAs, and uses LLMs for robust extraction.</li>
+<li>Advanced OCR & Document AI: Extracts text from images/scans and offers sophisticated chunking and LLM-based document transformations.</li>
+<li>Seamless Vector Database Integration: Natively supports loading into vector stores for modern AI applications.</li>
+<li>Flexible Schema & Transformation Engine: Customizable pipelines adapt to diverse data structuring needs.</li>
+<li>End-to-End Pipeline Orchestration & Monitoring: Centralized control and visibility over the entire data flow.</li>
+</ul>`
+                },
+                hephaestus: {
+                    title: "Hephaestus: The AI Responder for Automated Cross-Platform Remediation",
+                    content: `<h3>Executive Summary</h3>
+<p>Modern IT operations and security teams face immense pressure to maintain system stability, security, and compliance across increasingly complex hybrid and multi-cloud environments. Responding to incidents, patching vulnerabilities, and correcting misconfigurations manually is slow, error-prone, and struggles to scale, leading to extended downtime, increased risk exposure, and significant operational overhead.</p>
+<p>Hephaestus, TechWish’s AI-powered remediation engine, directly addresses this critical gap. Functioning as an "AI Responder," it automates the identification and execution of corrective actions across diverse infrastructure platforms. Hephaestus streamlines the remediation lifecycle by intelligently selecting and triggering pre-approved actions—from running scripts and playbooks to integrating with ITSM workflows—drastically reducing Mean Time To Remediate (MTTR) and enhancing overall operational resilience.</p>
+<h3>Why Traditional Approaches Fall Short</h3>
+<p>Traditional manual approaches to IT incident remediation present major difficulties:</p>
+<ul>
+<li>Slow Incident Resolution (High MTTR): Manual diagnosis, approval chains, and execution significantly delay the fixing of critical issues, impacting service availability and security posture.</li>
+<li>Inconsistent Remediation: Different operators applying fixes manually can lead to variations, errors, and unpredictable outcomes, potentially worsening the initial problem.</li>
+<li>Operational Overhead & Toil: Repetitive remediation tasks consume valuable time from skilled IT and security personnel, diverting them from strategic initiatives.</li>
+</ul>
+<h3>How Hephaestus Helps Your Team</h3>
+<p>Hephaestus provides an automated, intelligent solution for cross-platform remediation:</p>
+<ul>
+<li>Intelligent Alert Analysis & Action Selection: Ingests alerts and findings from monitoring, security, and compliance tools. Its AI engine analyzes the context, correlates events, and intelligently selects the most appropriate, pre-approved remediation playbook or action sequence based on the issue type, affected asset, and organizational policies.</li>
+<li>Platform-Agnostic Execution: Seamlessly executes remediation actions across diverse environments including public clouds (AWS, Azure, GCP), private clouds (VMware), on-premises infrastructure, and various operating systems using native APIs, SSH, PowerShell, and other standard protocols.</li>
+<li>Automated Playbook Orchestration: Executes predefined, vetted sequences of actions (playbooks) to ensure consistent, reliable, and compliant remediation for common issues like patching, configuration correction, service restarts, or resource adjustments.</li>
+<li>Human-in-the-Loop Control: Offers configurable workflows that can require human review and explicit approval before executing critical or sensitive remediation actions, allowing organizations to balance automation with oversight.</li>
+<li>Automated Verification & Closure: Attempts to verify the success of remediation actions (e.g., checking service status, re-scanning configurations) and integrates with ITSM tools to update incident tickets, closing the loop on the remediation process.</li>
+<li>Comprehensive Audit Trail: Logs all analysis steps, decisions made (AI or human), actions executed, and verification outcomes, providing detailed evidence for compliance reporting and operational review.</li>
+</ul>
+<h3>Business Benefits</h3>
+<ul>
+<li>Dramatically Reduced MTTR</li>
+<li>Increased Operational Efficiency</li>
+<li>Consistent and accurate issue resolution</li>
+<li>Reduced Operational Costs</li>
+</ul>
+<h3>Operational Highlights</h3>
+<ul>
+<li>AI-driven analysis and selection of optimal, pre-approved remediation actions.</li>
+<li>Platform-agnostic execution across public cloud, private cloud, hybrid environments, and diverse OS.</li>
+<li>Reliable execution of standardized remediation playbooks for consistency and compliance.</li>
+<li>Configurable human-in-the-loop approval workflows for critical actions.</li>
+<li>Automated verification checks to confirm successful remediation.</li>
+<li>Detailed, immutable audit logging for governance and reporting.</li>
+</ul>`
+                }
+            };
+
             // --- Configuration for the Automatic Popup Flow (Content & Anchors) ---
             const flowStepsConfig = [
                 {
@@ -311,19 +545,28 @@
             ];
 
             const DISPLAY_DURATION = 8000; 
-            const ANIMATION_DURATION_JS = 5200; // Corresponds to CSS animation duration (1.2s)
+            const ANIMATION_DURATION_JS = 5200; // Corresponds to CSS animation duration 
             const DELAY_BETWEEN_POPUPS = 200;
 
             let currentFlowStepIndex = 0;
             const flowPopupElements = []; 
             let activeFlowTimeout = null; 
 
-            // --- 1. Initialize Original Hover Logic for Nodes ---
+            // --- 1. Initialize Original Hover Logic & Modal Trigger ---
+            const modal = document.getElementById('detail-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const modalClose = document.getElementById('modal-close');
+            let hideTimeoutId = null; // Variable to store the timeout ID for hiding popups
+
             document.querySelectorAll('.node-container').forEach(container => {
                 const hoverPopup = container.querySelector('.popup'); 
+                const learnMoreLink = hoverPopup?.querySelector('.learn-more-link'); // Select the specific link
 
                 if (hoverPopup) {
-                    container.addEventListener('mouseenter', () => {
+                    // Function to show the popup
+                    const showPopup = () => {
+                        clearTimeout(hideTimeoutId); // Clear any pending hide timeout
                         if (window.innerWidth < 768) return; 
 
                         const nodeImage = container.querySelector('.node-image');
@@ -337,14 +580,60 @@
                             }
                         }
                         hoverPopup.style.display = 'block'; 
-                    });
+                    };
 
-                    container.addEventListener('mouseleave', () => {
-                        if (window.innerWidth < 768) return;
-                        hoverPopup.style.display = 'none'; 
+                    // Function to hide the popup after a delay
+                    const startHideTimeout = () => {
+                        clearTimeout(hideTimeoutId); // Clear previous timeout if any
+                        hideTimeoutId = setTimeout(() => {
+                            if (window.innerWidth >= 768) { // Check screen size again before hiding
+                                hoverPopup.style.display = 'none'; 
+                            }
+                        }, 200); // 200ms delay
+                    };
+
+                    // Event listeners for the node container
+                    container.addEventListener('mouseenter', showPopup);
+                    container.addEventListener('mouseleave', startHideTimeout);
+
+                    // Event listeners for the popup itself
+                    hoverPopup.addEventListener('mouseenter', () => {
+                        clearTimeout(hideTimeoutId); // Cancel hiding if mouse enters popup
                     });
+                    hoverPopup.addEventListener('mouseleave', startHideTimeout);
+
+
+                    // Add click listener for the modal
+                    if (learnMoreLink) {
+                        learnMoreLink.addEventListener('click', (event) => {
+                            event.preventDefault(); // Prevent default link behavior
+                            const componentKey = learnMoreLink.dataset.component; // Get component name from data attribute
+                            const contentData = detailedContent[componentKey];
+
+                            if (contentData && modal && modalTitle && modalBody) {
+                                modalTitle.textContent = contentData.title;
+                                modalBody.innerHTML = contentData.content; // Use innerHTML to render the HTML content
+                                modal.classList.add('active'); // Show the modal
+                            } else {
+                                console.error("Could not find content or modal elements for:", componentKey);
+                            }
+                        });
+                    }
                 }
             });
+
+            // --- Modal Close Logic ---
+            if (modal && modalClose) {
+                modalClose.addEventListener('click', () => {
+                    modal.classList.remove('active');
+                });
+                // Optional: Close modal if overlay is clicked
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) { // Check if the click was directly on the overlay
+                        modal.classList.remove('active');
+                    }
+                });
+            }
 
             // --- 2. Initialize and Create Popups for the Automatic Flow ---
             for (let i = 0; i < flowStepsConfig.length; i++) {
@@ -471,7 +760,10 @@
                     if (window.innerWidth >= 768 && flowPopupElements.length > 0 && flowPopupElements.some(p => p !== null)) {
                         executeAutomatedFlowStep(); 
                     } else if (window.innerWidth < 768) {
-                        // Mobile handling
+                        // Mobile handling: Ensure original popups are visible if needed
+                         document.querySelectorAll('.popup').forEach(p => {
+                            p.style.display = 'block'; // Ensure static display as per mobile CSS
+                         });
                     }
                 }, 250);
             });
@@ -498,4 +790,3 @@
     </script>
 
 </body>
-</html>
