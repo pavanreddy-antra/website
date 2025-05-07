@@ -15,158 +15,51 @@
         /* --- 1. General Styles --- */
         body {
             font-family: 'Inter', sans-serif;
-            /* Using the background from your original code */
             background-color: #111827; /* Dark Background (Gray-900) */
             color: #d1d5db; /* Default light text (Gray-300) */
             overflow-x: hidden;
-            /* Removed min-height to match original */
         }
 
         /* --- 2. Layout Styles --- */
-        .main-container {
-            /* Kept original padding/gap */
-        }
+        .main-container {}
 
         .sources-section {
-             background-color: #1f2937; /* Darker Gray (Gray-800) */
-             /* border: 1px solid #374151; /* Gray-700 border */
-             /* Removed backdrop-filter */
+             background-color: #1f2937; 
+             position: relative; 
         }
         .outcomes-section {
-            background-color: #1f2937;   /*Darker Gray (Gray-800) */
-            /* Removed border and backdrop-filter to match original */
+            background-color: #1f2937;  
+            position: relative; 
         }
-        .diagram-section {
-            /* Kept original */
-        }
+        .diagram-section {}
 
         /* --- 3. Diagram Component Styles --- */
+        @keyframes moveDotsLeftToRight {0% { background-position: 0 center; } 100% { background-position: 30px center; }}
+        @keyframes moveDotsTopToBottom {0% { background-position: center 0; } 100% { background-position: center 30px; }}
+        @keyframes moveDotsBottomToTop {0% { background-position: center 30px; } 100% { background-position: center 0; }}
+        @keyframes pulseNodeGlow {0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } 50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }}
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); }}
 
-        /* NEW: Keyframes for moving dots animation */
-        @keyframes moveDotsLeftToRight {
-            0% { background-position: 0 center; }
-            100% { background-position: 30px center; } /* Adjust '30px' to control speed/spacing */
-        }
-        @keyframes moveDotsTopToBottom {
-            0% { background-position: center 0; }
-            100% { background-position: center 30px; } /* Adjust '30px' to control speed/spacing */
-        }
-         @keyframes moveDotsBottomToTop {
-             0% { background-position: center 30px; }
-             100% { background-position: center 0; }
-         }
+        .line { position: absolute; transform-origin: 0 0; z-index: 0; background-color: #6b7280; overflow: hidden; border-radius: 3px; }
+        .line::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1.5px); background-repeat: repeat; background-size: 30px 30px; animation: moveDotsLeftToRight 1s linear infinite; opacity: 0.8; }
+        .line-horizontal { height: 4px; }
+        .line-horizontal::after { background-size: 30px 4px; animation-name: moveDotsLeftToRight; }
+        .line-vertical { width: 4px; }
+        .line-vertical::after { background-size: 4px 30px; animation-name: moveDotsTopToBottom; animation-duration: 1s; animation-timing-function: linear; animation-iteration-count: infinite; }
+        .line-vertical.flow-up::after { animation-name: moveDotsBottomToTop; }
+        .line-vertical.flow-down::after { animation-name: moveDotsTopToBottom; }
 
-        /* Keyframes for Node Glow (from original) */
-        @keyframes pulseNodeGlow {
-            0%, 100% { box-shadow: 0 0 8px 2px rgba(96, 165, 250, 0.4); } /* Light blue glow */
-            50% { box-shadow: 0 0 16px 4px rgba(96, 165, 250, 0.6); }
-        }
-        /* Subtle floating animation for logo cloud */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
+        .node-container { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; cursor: pointer; /* For hover */ width: 90px; }
+        .node-image { width: 80px; height: 80px; object-fit: cover; display: block; transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out; margin-bottom: 4px; border-radius: 50%; animation: pulseNodeGlow 3s infinite ease-in-out; }
+        .node-label { font-size: 0.8rem; font-weight: 500; color: #e5e7eb; text-align: center; margin-top: 2px; }
+        .node-description { font-size: 0.65rem; font-weight: 400; color: #9ca3af; text-align: center; margin-top: 1px; line-height: 1.2; }
+        .node-container:hover .node-image { transform: scale(1.1); animation-play-state: paused; box-shadow: 0 0 20px 5px rgba(96, 165, 250, 0.7); }
 
-        /* Line Styles */
-        .line {
-            position: absolute;
-            transform-origin: 0 0;
-            z-index: 0;
-            /* Base line color - slightly darker gray for contrast with dots */
-            background-color: #6b7280; /* Gray-500 */
-            overflow: hidden;
-            border-radius: 3px; /* from original */
-        }
-        .line::after { /* Animated dots element */
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            /* Repeating radial gradient for dots */
-            background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1.5px); /* Light gray dots */
-            background-repeat: repeat;
-            background-size: 30px 30px; /* Spacing of the dots - adjust as needed */
-            animation: moveDotsLeftToRight 1s linear infinite; /* Apply horizontal dot animation */
-            opacity: 0.8; /* Adjust opacity if needed */
-        }
-
-        .line-horizontal {
-            height: 4px; /* Thickness - from original */
-        }
-         .line-horizontal::after {
-             background-size: 30px 4px; /* Adjust size for horizontal line height */
-             animation-name: moveDotsLeftToRight;
-         }
-
-        .line-vertical {
-            width: 4px; /* Thickness - from original */
-        }
-        .line-vertical::after {
-            background-size: 4px 30px; /* Adjust size for vertical line width */
-            animation-name: moveDotsTopToBottom; /* Default vertical animation */
-            animation-duration: 1s; /* Match duration */
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-        }
-        /* Specific animation direction for lines flowing upwards */
-         .line-vertical.flow-up::after {
-             animation-name: moveDotsBottomToTop;
-         }
-         /* Specific animation direction for lines flowing downwards (redundant but explicit) */
-         .line-vertical.flow-down::after {
-             animation-name: moveDotsTopToBottom;
-         }
-
-
-        /* Nodes (Using original styles) */
-        .node-container {
-            position: absolute;
-            z-index: 1;
-            display: flex;
-            flex-direction: column; /* Stack image and label */
-            align-items: center;
-            cursor: pointer;
-            width: 90px; /* Adjust width to fit label */
-        }
-        .node-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
-            margin-bottom: 4px;
-            border-radius: 50%;
-            animation: pulseNodeGlow 3s infinite ease-in-out;
-        }
-        .node-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #e5e7eb;
-            text-align: center;
-            margin-top: 2px;
-        }
-        /* Style for the description label */
-        .node-description {
-            font-size: 0.65rem; /* Extra small */
-            font-weight: 400;
-            color: #9ca3af; /* Lighter gray */
-            text-align: center;
-            margin-top: 1px; /* Space below node name */
-            line-height: 1.2; /* Tighter line height */
-        }
-
-        .node-container:hover .node-image {
-             transform: scale(1.1);
-             animation-play-state: paused; /* Pause node glow too */
-             box-shadow: 0 0 20px 5px rgba(96, 165, 250, 0.7);
-         }
-
-        /* Popups (Using original styles) */
+        /* --- Original Popup Styles (for HOVER) --- */
         .popup {
-            display: none;
+            display: none; /* Initially hidden for hover */
             position: absolute;
-            bottom: calc(100% + 15px);
+            bottom: calc(100% + 15px); 
             left: 50%;
             transform: translateX(-50%);
             width: 250px;
@@ -176,255 +69,121 @@
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
             font-size: 0.875rem;
-            line-height: 1.25rem;
-            z-index: 10;
+            line-height: 1.25rem; /* Original line height */
+            z-index: 10; /* Original z-index for hover popups */
             text-align: left;
             font-weight: normal;
             border: 1px solid #4b5563;
         }
-        .popup a { color: #60a5fa; }
+        .popup a { color: #60a5fa; } /* Original link color */
         .popup a:hover { text-decoration: underline; }
 
-        .popup::after {
-            content: "";
+        .popup::after { /* Arrow for original popups */
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #374151 transparent transparent transparent;
+        }
+        .popup-bottom { bottom: auto; top: calc(100% + 15px); }
+        .popup-bottom::after { top: auto; bottom: 100%; border-color: transparent transparent #374151 transparent; }
+        
+        /* JS handles display for hover popups */
+
+
+        /* --- FLOW Popup Styles (for AUTOMATIC SEQUENCE) --- */
+        .flow-popup {
+            display: none; /* Initially hidden, JS controls display */
             position: absolute;
-            top: 100%;
+            bottom: calc(100% + 15px); /* Default: above element */
             left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #374151 transparent transparent transparent;
-        }
-        .popup-bottom {
-            bottom: auto;
-            top: calc(100% + 15px);
-        }
-        .popup-bottom::after {
-            top: auto;
-            bottom: 100%;
-            border-color: transparent transparent #374151 transparent;
-        }
-        .node-container:hover .popup {
-            display: block;
-        }
-
-        /* --- 4. Logo Cloud Styles (Using original styles + float animation) --- */
-        #logo-cloud-wrapper .logo-container {
-            position: relative;
-            width: 22vw;
-            height: 35vh;
-            max-width: 800px;
-            max-height: 500px;
-            margin: 2rem auto;
-        }
-        #logo-cloud-wrapper .logo-card {
-            position: absolute;
-            background-color: #374151; /* Darker card */
-            border-radius: 0.75rem;
-            padding: 1rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 4rem;
-            height: 4rem;
-            z-index: 1;
-             transition: transform 0.2s ease-in-out;
-             animation: float 6s ease-in-out infinite;
-        }
-        #logo-cloud-wrapper #splunk { animation-delay: 0s; }
-        #logo-cloud-wrapper #pagerduty { animation-delay: -1s; }
-        #logo-cloud-wrapper #azure { animation-delay: -2s; }
-        #logo-cloud-wrapper #databricks { animation-delay: -3s; }
-        #logo-cloud-wrapper #confluence { animation-delay: -4s; }
-        #logo-cloud-wrapper #google-drive { animation-delay: -0.5s; }
-        #logo-cloud-wrapper #github { animation-delay: -1.5s; }
-        #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
-
-         #logo-cloud-wrapper .logo-card:hover {
-             transform: scale(1.1);
-             animation-play-state: paused;
-         }
-        #logo-cloud-wrapper .logo-icon {
-            font-size: 1.75rem;
-            color: #d1d5db;
-        }
-        #logo-cloud-wrapper .fa-github { color: #f3f4f6; }
-        #logo-cloud-wrapper .fa-slack { color: #e0a0e5; }
-        #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; }
-        #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; }
-        #logo-cloud-wrapper .fa-cloud { color: #76b8e4; }
-        #logo-cloud-wrapper .fa-server { color: #f7be8f; }
-        #logo-cloud-wrapper .fa-bell { color: #74d699; }
-        #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
-        #logo-cloud-wrapper #splunk { top: 10%; left: 20%; }
-        #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
-        #logo-cloud-wrapper #azure { top: 70%; left: 25%; }
-        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
-        #logo-cloud-wrapper #confluence { top: 25%; left: 75%; }
-        #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; }
-        #logo-cloud-wrapper #github { top: -5%; left: 85%; }
-        #logo-cloud-wrapper #slack { top: 65%; left: 80%; }
-        #logo-cloud-wrapper .fade-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 70%;
-            height: 100%;
-            background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 70%);
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* --- 5. Carousel Styles (Using original styles) --- */
-        #carousel {
-            overflow: hidden;
-            height: 150px;
-            position: relative;
-            border-radius: 0.5rem;
-        }
-        .carousel-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            transition: transform 0.8s ease-in-out;
-        }
-        .carousel-list li {
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #9ca3af;
-            opacity: 0.7;
+            width: 250px; /* Consistent width */
+            background-color: #374151; /* Same background */
+            color: #d1d5db; /* Same text color */
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Slightly stronger shadow for flow if desired */
             font-size: 0.875rem;
-            font-weight: 400;
-            transition: color 0.5s ease, opacity 0.5s ease, font-weight 0.5s ease, font-size 0.5s ease;
+            line-height: 1.4; /* Adjusted for flow content readability */
+            z-index: 20; /* Higher z-index to ensure it's above hover popups if they overlap briefly */
+            text-align: left;
+            font-weight: normal;
+            border: 1px solid #4b5563;
         }
-        .carousel-list li.highlighted {
-            color: #f9fafb;
-            font-weight: 600;
-            opacity: 1;
-            font-size: 1rem;
+        .flow-popup::after { /* Arrow for flow popups */
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #374151 transparent transparent transparent;
+        }
+        .flow-popup.popup-bottom { bottom: auto; top: calc(100% + 15px); }
+        .flow-popup.popup-bottom::after { top: auto; bottom: 100%; border-color: transparent transparent #374151 transparent; }
+
+        /* Smoother animation with adjusted duration and easing */
+        @keyframes fadeInFlowPopup {
+          from { opacity: 0; transform: translate(-50%, 10px); } /* Start slightly lower */
+          to   { opacity: 1; transform: translate(-50%, 0px); }
+        }
+        @keyframes fadeOutFlowPopup {
+          from { opacity: 1; transform: translate(-50%, 0px); }
+          to   { opacity: 0; transform: translate(-50%, -10px); } /* End slightly higher */
         }
 
-        /* --- 6. Responsive Styles (Using original styles) --- */
+        .flow-popup.flow-popup-active {
+          display: block !important; 
+          opacity: 0; 
+          transform: translate(-50%, 10px); 
+          animation: fadeInFlowPopup 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+        }
+        .flow-popup.flow-popup-hiding {
+          opacity: 1; 
+          transform: translate(-50%, 0px); 
+          animation: fadeOutFlowPopup 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+        }
+
+        /* --- Logo Cloud & Carousel Styles (Original) --- */
+        #logo-cloud-wrapper .logo-container { position: relative; width: 22vw; height: 35vh; max-width: 800px; max-height: 500px; margin: 2rem auto; }
+        #logo-cloud-wrapper .logo-card { position: absolute; background-color: #374151; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3); display: flex; justify-content: center; align-items: center; width: 4rem; height: 4rem; z-index: 1; transition: transform 0.2s ease-in-out; animation: float 6s ease-in-out infinite; }
+        #logo-cloud-wrapper #splunk { animation-delay: 0s; } #logo-cloud-wrapper #pagerduty { animation-delay: -1s; } #logo-cloud-wrapper #azure { animation-delay: -2s; } #logo-cloud-wrapper #databricks { animation-delay: -3s; } #logo-cloud-wrapper #confluence { animation-delay: -4s; } #logo-cloud-wrapper #google-drive { animation-delay: -0.5s; } #logo-cloud-wrapper #github { animation-delay: -1.5s; } #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
+        #logo-cloud-wrapper .logo-card:hover { transform: scale(1.1); animation-play-state: paused; }
+        #logo-cloud-wrapper .logo-icon { font-size: 1.75rem; color: #d1d5db; }
+        #logo-cloud-wrapper .fa-github { color: #f3f4f6; } #logo-cloud-wrapper .fa-slack { color: #e0a0e5; } #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; } #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; } #logo-cloud-wrapper .fa-cloud { color: #76b8e4; } #logo-cloud-wrapper .fa-server { color: #f7be8f; } #logo-cloud-wrapper .fa-bell { color: #74d699; } #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
+        #logo-cloud-wrapper #splunk { top: 10%; left: 20%; } #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; } #logo-cloud-wrapper #azure { top: 70%; left: 25%; } #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; } #logo-cloud-wrapper #github { top: -5%; left: 85%; } #logo-cloud-wrapper #slack { top: 65%; left: 80%; }
+        #logo-cloud-wrapper .fade-overlay { position: absolute; top: 0; left: 0; width: 70%; height: 100%; background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 70%); pointer-events: none; z-index: 2; }
+        #carousel { overflow: hidden; height: 150px; position: relative; border-radius: 0.5rem; }
+        .carousel-list { list-style: none; padding: 0; margin: 0; width: 100%; transition: transform 0.8s ease-in-out; }
+        .carousel-list li { height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; padding-left: 0.5rem; padding-right: 0.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #9ca3af; opacity: 0.7; font-size: 0.875rem; font-weight: 400; transition: color 0.5s ease, opacity 0.5s ease, font-weight 0.5s ease, font-size 0.5s ease; }
+        .carousel-list li.highlighted { color: #f9fafb; font-weight: 600; opacity: 1; font-size: 1rem; }
+
+        /* --- Responsive Styles --- */
         @media (max-width: 767.98px) {
-            .main-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            .sources-section, .outcomes-section {
-                width: 90%;
-                margin-bottom: 2rem;
-            }
-            .sources-section { order: 1; }
-            .outcomes-section { order: 2; }
-            .diagram-section {
-                width: 100%;
-                height: auto;
-                padding: 1rem 0;
-                min-height: auto;
-                order: 3;
-            }
-            #logo-cloud-wrapper .logo-container {
-                width: 90vw;
-                height: 45vh;
-                margin: 1rem auto;
-            }
-            #logo-cloud-wrapper .logo-card {
-                width: 3.5rem;
-                height: 3.5rem;
-                padding: 0.75rem;
-                animation: none;
-            }
-             #logo-cloud-wrapper .logo-card:hover {
-                 transform: scale(1.1);
-             }
-            #logo-cloud-wrapper .logo-icon {
-                font-size: 1.5rem;
-            }
-            #logo-cloud-wrapper #splunk { top: 10%; left: 15%; }
-            #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; }
-            #logo-cloud-wrapper #azure { top: 70%; left: 20%; }
-            #logo-cloud-wrapper #databricks { top: 5%; left: 50%; }
-            #logo-cloud-wrapper #confluence { top: 25%; left: 75%; }
-            #logo-cloud-wrapper #google-drive { top: 50%; left: 55%; }
-            #logo-cloud-wrapper #github { top: 10%; left: 80%; }
-            #logo-cloud-wrapper #slack { top: 70%; left: 75%; }
-            #logo-cloud-wrapper .fade-overlay {
-                width: 45%;
-                 background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 50%);
-            }
-            .diagram-content {
-                height: auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-            .node-container {
-                position: relative;
-                top: auto; left: auto; margin: 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-            }
-             .node-image {
-                  margin-bottom: 0.5rem;
-                  width: 70px;
-                  height: 70px;
-                  animation: none;
-             }
-             .node-label {
-                 color: #d1d5db;
-                 margin-top: 0;
-             }
-            /* Show description on mobile too */
-            .node-description {
-                display: block;
-                font-size: 0.7rem; /* Slightly larger for mobile */
-                color: #9ca3af;
-            }
-            .node-active .node-label {
-                color: #f0f0f0; /* Slightly brighter label */
-            }
-            .node-active .node-description {
-                color: #b0b0b0; /* Slightly brighter description */
-            }
-             
+            .main-container { flex-direction: column; align-items: center; }
+            .sources-section, .outcomes-section { width: 90%; margin-bottom: 2rem; }
+            .sources-section { order: 1; } .outcomes-section { order: 2; }
+            .diagram-section { width: 100%; height: auto; padding: 1rem 0; min-height: auto; order: 3; }
+            #logo-cloud-wrapper .logo-container { width: 90vw; height: 45vh; margin: 1rem auto; }
+            #logo-cloud-wrapper .logo-card { width: 3.5rem; height: 3.5rem; padding: 0.75rem; animation: none; }
+            #logo-cloud-wrapper .logo-card:hover { transform: scale(1.1); }
+            #logo-cloud-wrapper .logo-icon { font-size: 1.5rem; }
+            #logo-cloud-wrapper #splunk { top: 10%; left: 15%; } #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; } #logo-cloud-wrapper #azure { top: 70%; left: 20%; } #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } #logo-cloud-wrapper #google-drive { top: 50%; left: 55%; } #logo-cloud-wrapper #github { top: 10%; left: 80%; } #logo-cloud-wrapper #slack { top: 70%; left: 75%; }
+            #logo-cloud-wrapper .fade-overlay { width: 45%; background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 50%); }
+            .diagram-content { height: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+            .node-container { position: relative; top: auto; left: auto; margin: 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
+            .node-image { margin-bottom: 0.5rem; width: 70px; height: 70px; animation: none; }
+            .node-label { color: #d1d5db; margin-top: 0; }
+            .node-description { display: block; font-size: 0.7rem; color: #9ca3af; }
             .line { display: none; }
-            .popup {
-                position: relative;
-                display: block;
-                opacity: 1; pointer-events: auto;
-                bottom: auto; top: 5px; left: auto;
-                transform: none;
-                width: 90%; max-width: 300px;
-                margin-top: 0.5rem;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                 background-color: #1f2937;
-                 border: 1px solid #374151;
-            }
-            .popup::after, .popup-bottom::after {
-                 border-color: transparent transparent #1f2937 transparent;
-            }
-             .popup-bottom::after {
-                 border-color: transparent transparent #1f2937 transparent;
-             }
-            .node-container:hover .popup {}
-            .node-container:hover .node-image { transform: none; }
-            #carousel { height: 150px; }
-            .carousel-list li { height: 50px; }
-        }
 
+            /* Mobile popup behavior: Original popups shown statically */
+            .popup { /* This targets the original popups in HTML */
+                display: block !important; position: relative !important; opacity: 1 !important; visibility: visible !important;
+                transform: none !important; width: 90%; max-width: 300px; margin-top: 0.75rem; margin-left: auto; margin-right: auto;
+                margin-bottom: 0.5rem; left: auto; top: auto; bottom: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                background-color: #1f2937; border: 1px solid #374151; animation: none !important;
+            }
+            .popup::after, .popup-bottom::after { display: none; }
+            .node-container:hover .node-image { transform: none; }
+            
+            /* Ensure flow popups are hidden on mobile as the flow doesn't run */
+            .flow-popup { display: none !important; }
+
+            #carousel { height: 150px; } .carousel-list li { height: 50px; }
+        }
     </style>
 </head>
 
@@ -438,7 +197,7 @@
     <div
         class="main-container flex flex-col md:flex-row md:justify-center items-start md:items-center gap-8 min-h-[60vh] w-full max-w-7xl mx-auto">
 
-        <div class="sources-section w-full md:w-1/3 order-1 p-0 md:p-4 rounded-lg">
+        <div id="sources-section" class="sources-section w-full md:w-1/3 order-1 p-0 md:p-4 rounded-lg">
             <div id="logo-cloud-wrapper">
                 <div class="logo-container">
                     <div class="fade-overlay"></div>
@@ -450,7 +209,7 @@
                     <div id="google-drive" class="logo-card" aria-label="Google Drive Logo"><i class="fab fa-google-drive logo-icon" title="Google Drive"></i></div>
                     <div id="github" class="logo-card" aria-label="GitHub Logo"><i class="fab fa-github logo-icon" title="GitHub"></i></div>
                     <div id="slack" class="logo-card" aria-label="Slack Logo"><i class="fab fa-slack logo-icon" title="Slack"></i></div>
-                </div>
+                    </div>
             </div>
         </div>
 
@@ -463,72 +222,263 @@
                 <div class="line line-vertical flow-down" style="left: calc(90% - 90px); top: 50%; height: 70px;"></div>
                 <div class="line line-vertical flow-down" style="left: calc(75% + 90px); top: 50%; height: 70px;"></div>
 
-                <div class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px); width: 90px; height: auto;"> <img class="node-image"
-                          src="https://imgur.com/0ya7Fj7.png"
-                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';"
-                          alt="Atlas Icon (Shield)"
-                          title="Atlas: Ingests & Enriches Data">
+                <div id="atlas-node-container" class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px);">
+                    <img class="node-image" src="https://imgur.com/0ya7Fj7.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';" alt="Atlas Icon">
                     <div class="node-label">Atlas</div> 
                     <div class="node-description">Data Ingestion & Enrichment</div>
-                    <div class="popup">
-                        <h3 class="font-semibold mb-1">Atlas</h3>
+                    <div class="popup" id="atlas-hover-popup"> <h3 class="font-semibold mb-1">Atlas</h3>
                         <p>Streamline the preparation and transformation of diverse, unstructured data. ATLAS automates data crawling, extraction, cleansing, and structuring, ensuring high-quality, AI-ready datasets.</p>
-                        <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px); width: 90px; height: auto;"> <img class="node-image"
-                         src="https://imgur.com/QyrDXOG.png"
-                         onerror="this.onerror=null; this.src='https://placehold.co/80x80/88a0f2/FFFFFF?text=Wizard';"
-                         alt="Merlin Icon (Wizard)" title="Merlin: Correlation & Pattern Analysis">
+                <div id="merlin-node-container" class="node-container" style="top: calc(50% - 160px); left: calc(75% - 45px);">
+                    <img class="node-image" src="https://imgur.com/QyrDXOG.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/88a0f2/FFFFFF?text=Merlin';" alt="Merlin Icon">
                     <div class="node-label">Merlin</div> 
                     <div class="node-description">Correlation & Insights</div>
-                    <div class="popup">
-                        <h3 class="font-semibold mb-1">Merlin</h3>
+                    <div class="popup" id="merlin-hover-popup"> <h3 class="font-semibold mb-1">Merlin</h3>
                         <p>Enhance the efficiency of on-call teams. Automatically correlate current issues with historical incident resolutions, integrated knowledge bases, and real-time actionable insights.</p>
-                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px); width: 80px; height: auto;"> <img class="node-image"
-                          src="https://imgur.com/xMcN4Yw.png"
-                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Owl';"
-                          alt="Argus Icon (Owl)" title="Argus: Triaging & Root Cause Analysis">
+                <div id="argus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px);">
+                    <img class="node-image" src="https://imgur.com/xMcN4Yw.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Argus';" alt="Argus Icon">
                     <div class="node-label">Argus</div> 
                     <div class="node-description">Anomaly Detection & RCA</div>
-                    <div class="popup popup-bottom">
-                        <h3 class="font-semibold mb-1">Argus</h3>
+                    <div class="popup popup-bottom" id="argus-hover-popup"> <h3 class="font-semibold mb-1">Argus</h3>
                         <p>Transform log management to proactive monitoring. Uses advanced ML for real-time anomaly detection, incident forecasting, and automated root cause analysis.</p>
-                         <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-                 <div class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px); width: 90px; height: auto;"> <img class="node-image"
-                          src="https://imgur.com/7QbiKPT.png"
-                          onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Dwarf';"
-                          alt="Hephaestus Icon (Dwarf/Builder)" title="Hephaestus: Recommended Actions & Updates">
+                <div id="hephaestus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px);">
+                    <img class="node-image" src="https://imgur.com/7QbiKPT.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Hephaestus';" alt="Hephaestus Icon">
                     <div class="node-label">Hephaestus</div> 
                     <div class="node-description">Action & Automation</div>
-                    <div class="popup popup-bottom">
-                        <h3 class="font-semibold mb-1">Hephaestus</h3>
+                    <div class="popup popup-bottom" id="hephaestus-hover-popup"> <h3 class="font-semibold mb-1">Hephaestus</h3>
                         <p>Optimize performance and cost efficiency in data environments. Proactively identifies bottlenecks and provides actionable recommendations.</p>
-                        <a href="#" class="text-blue-500 hover:underline mt-2 inline-block">Learn More</a>
+                        <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Learn More</a>
                     </div>
                 </div>
-            </div>
+                </div>
         </div>
 
-        <div class="outcomes-section w-full md:w-1/3 order-2 md:order-3 p-4 rounded-lg md:ml-3">
+        <div id="outcomes-section" class="outcomes-section w-full md:w-1/3 order-2 md:order-3 p-4 rounded-lg md:ml-3">
              <div id="carousel" class="relative">
-                <ul class="carousel-list">
-                    </ul>
+                <ul class="carousel-list"></ul>
             </div>
-        </div>
-
+            </div>
     </div>
 
     <script>
-        // --- Carousel Logic (Using original script) ---
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Configuration for the Automatic Popup Flow (Content & Anchors) ---
+            const flowStepsConfig = [
+                {
+                    anchorId: 'sources-section', 
+                    flowPopupId: 'flow-popup-sources', 
+                    title: 'Sources',
+                    content: 'Sources & Ingestion: Collect and unify data from diverse IT monitoring, ITSM, cloud, data, collaboration, and infrastructure sources.'
+                },
+                {
+                    anchorId: 'atlas-node-container',
+                    flowPopupId: 'flow-popup-atlas',
+                    title: 'Atlas',
+                    content: 'Alert Context Enrichment: Add context to raw alerts using knowledge bases, operational data stores, topology information, and other relevant data sources.'
+                },
+                {
+                    anchorId: 'merlin-node-container',
+                    flowPopupId: 'flow-popup-merlin',
+                    title: 'Merlin',
+                    content: 'Alert/Event Correlation: Find patterns in alerts through ML, symptom stacks, custom policies, and historical data.'
+                },
+                {
+                    anchorId: 'argus-node-container',
+                    flowPopupId: 'flow-popup-argus',
+                    title: 'Argus',
+                    content: 'Incident Triaging & Root Cause Analysis (RCA): Prioritize incidents based on impact and identify likely root causes.'
+                },
+                {
+                    anchorId: 'hephaestus-node-container',
+                    flowPopupId: 'flow-popup-hephaestus',
+                    title: 'Hephaestus',
+                    content: 'Recommended Actions & Incident Update: Suggest remediation steps and update incident records.'
+                },
+                {
+                    anchorId: 'outcomes-section',
+                    flowPopupId: 'flow-popup-outcome',
+                    title: 'Outcome',
+                    content: 'Automated Ticketing, ITSM Integration & Resolution: Integrate with ITSM systems, enable automated resolution, and facilitate feedback loops.'
+                }
+            ];
+
+            const DISPLAY_DURATION = 3000; 
+            const ANIMATION_DURATION_JS = 700; // Corresponds to CSS animation duration for JS timeouts
+            const DELAY_BETWEEN_POPUPS = 200;
+
+            let currentFlowStepIndex = 0;
+            const flowPopupElements = []; 
+            let activeFlowTimeout = null; 
+
+            // --- 1. Initialize Original Hover Logic for Nodes ---
+            document.querySelectorAll('.node-container').forEach(container => {
+                const hoverPopup = container.querySelector('.popup'); 
+
+                if (hoverPopup) {
+                    container.addEventListener('mouseenter', () => {
+                        if (window.innerWidth < 768) return; 
+
+                        const nodeImage = container.querySelector('.node-image');
+                        if (nodeImage) {
+                            const nodeRect = nodeImage.getBoundingClientRect();
+                            const popupHeight = hoverPopup.offsetHeight || 100; 
+                            if (nodeRect.top < popupHeight + 20 && !hoverPopup.classList.contains('popup-bottom')) {
+                                hoverPopup.classList.add('popup-bottom');
+                            } else if (nodeRect.top >= popupHeight + 20 && hoverPopup.classList.contains('popup-bottom')) {
+                                hoverPopup.classList.remove('popup-bottom');
+                            }
+                        }
+                        hoverPopup.style.display = 'block'; 
+                    });
+
+                    container.addEventListener('mouseleave', () => {
+                        if (window.innerWidth < 768) return;
+                        hoverPopup.style.display = 'none'; 
+                    });
+                }
+            });
+
+            // --- 2. Initialize and Create Popups for the Automatic Flow ---
+            for (let i = 0; i < flowStepsConfig.length; i++) {
+                const config = flowStepsConfig[i];
+                const anchorElement = document.getElementById(config.anchorId);
+
+                if (!anchorElement) {
+                    console.warn(`Flow anchor element not found: ${config.anchorId}`);
+                    flowPopupElements.push(null); 
+                    continue; 
+                }
+
+                let flowPopup = document.getElementById(config.flowPopupId);
+                if (!flowPopup) { 
+                    flowPopup = document.createElement('div');
+                    flowPopup.classList.add('flow-popup');
+                    flowPopup.id = config.flowPopupId;
+                    
+                    const h3 = document.createElement('h3');
+                    h3.classList.add('font-semibold', 'mb-1');
+                    flowPopup.appendChild(h3);
+
+                    const p = document.createElement('p');
+                    flowPopup.appendChild(p);
+
+                    anchorElement.appendChild(flowPopup);
+                }
+                flowPopupElements.push(flowPopup); 
+            }
+            
+            // --- 3. Automatic Popup Flow Logic ---
+            function executeAutomatedFlowStep() {
+                clearTimeout(activeFlowTimeout); 
+
+                if (window.innerWidth < 768 || flowPopupElements.length === 0) {
+                    flowPopupElements.forEach(fp => {
+                        if(fp) {
+                            fp.style.display = 'none';
+                            fp.classList.remove('flow-popup-active', 'flow-popup-hiding');
+                        }
+                    });
+                    return; 
+                }
+
+                flowPopupElements.forEach((fp, index) => {
+                    if (fp && index !== currentFlowStepIndex) {
+                        fp.style.display = 'none'; 
+                        fp.classList.remove('flow-popup-active', 'flow-popup-hiding');
+                    }
+                });
+                
+                const config = flowStepsConfig[currentFlowStepIndex]; 
+                const currentFlowPopup = flowPopupElements[currentFlowStepIndex]; 
+                const currentAnchorElement = document.getElementById(config.anchorId); 
+
+                if (!currentFlowPopup || !currentAnchorElement) { 
+                    console.warn(`Flow popup or anchor missing for step ${currentFlowStepIndex} (Title: ${config.title})`);
+                    currentFlowStepIndex = (currentFlowStepIndex + 1) % flowStepsConfig.length;
+                    activeFlowTimeout = setTimeout(executeAutomatedFlowStep, DELAY_BETWEEN_POPUPS);
+                    return;
+                }
+
+                const h3 = currentFlowPopup.querySelector('h3');
+                const pTag = currentFlowPopup.querySelector('p');
+                if (h3) h3.textContent = config.title;
+                if (pTag) pTag.textContent = config.content;
+
+
+                currentFlowPopup.classList.remove('popup-bottom'); 
+                let referenceElementForPositioning = currentAnchorElement;
+                if (currentAnchorElement.classList.contains('node-container')) {
+                    referenceElementForPositioning = currentAnchorElement.querySelector('.node-image') || currentAnchorElement;
+                }
+                
+                const anchorRect = referenceElementForPositioning.getBoundingClientRect();
+                let popupHeight = currentFlowPopup.offsetHeight;
+                if (popupHeight < 50) popupHeight = 120; 
+
+                if (anchorRect.top < popupHeight + 20) {
+                    currentFlowPopup.classList.add('popup-bottom');
+                }
+                
+                currentFlowPopup.style.display = 'block'; 
+                currentFlowPopup.classList.remove('flow-popup-hiding');
+                currentFlowPopup.classList.add('flow-popup-active');
+
+                activeFlowTimeout = setTimeout(() => {
+                    if (currentFlowPopup) {
+                        currentFlowPopup.classList.remove('flow-popup-active'); 
+                        currentFlowPopup.classList.add('flow-popup-hiding');
+                        
+                        setTimeout(() => {
+                            if (currentFlowPopup) {
+                                currentFlowPopup.style.display = 'none';
+                                currentFlowPopup.classList.remove('flow-popup-hiding');
+                            }
+                        }, ANIMATION_DURATION_JS); // Use JS constant for timeout
+                    }
+
+                    currentFlowStepIndex = (currentFlowStepIndex + 1) % flowStepsConfig.length;
+                    activeFlowTimeout = setTimeout(executeAutomatedFlowStep, DELAY_BETWEEN_POPUPS);
+
+                }, DISPLAY_DURATION);
+            }
+            
+            if (flowPopupElements.length > 0 && flowPopupElements.some(p => p !== null)) { 
+                 executeAutomatedFlowStep();
+            }
+
+            let resizeDebounceTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeDebounceTimeout);
+                resizeDebounceTimeout = setTimeout(() => {
+                    clearTimeout(activeFlowTimeout);
+                    flowPopupElements.forEach(fp => {
+                        if (fp) {
+                            fp.style.display = 'none';
+                            fp.classList.remove('flow-popup-active', 'flow-popup-hiding');
+                            fp.style.animation = 'none'; 
+                        }
+                    });
+                    
+                    currentFlowStepIndex = 0; 
+                    if (window.innerWidth >= 768 && flowPopupElements.length > 0 && flowPopupElements.some(p => p !== null)) {
+                        executeAutomatedFlowStep(); 
+                    } else if (window.innerWidth < 768) {
+                        // Mobile handling
+                    }
+                }, 250);
+            });
+
+            // --- Carousel Logic (Original - Unchanged) ---
             const phrases = ["Faster Incident Resolution", "Enhanced Operational Efficiency", "Improved System Reliability", "Reduced Operational Costs", "Context-aware incident correlation", "Real-time on-call guidance", "Predictive log analytics", "Anomaly detection", "Root cause analysis"];
-            const rotationInterval = 3500; const transitionDuration = 800; const itemHeight = 50;
+            const rotationInterval = 3500; const carouselTransitionDuration = 800; const itemHeight = 50;
             const carouselContainer = document.getElementById('carousel'); if (!carouselContainer) return;
             const list = carouselContainer.querySelector('.carousel-list'); if (!list) return;
             let currentIndex = 0; const totalOriginalItems = phrases.length; let isResetting = false; let intervalId = null;
@@ -537,31 +487,14 @@
             allPhrases.forEach(phrase => { const li = document.createElement('li'); li.textContent = phrase; list.appendChild(li); });
             const allItems = list.querySelectorAll('li'); const totalListItems = allItems.length;
             function updateHighlight() { const middleItemIndex = (currentIndex + 1) % totalListItems; allItems.forEach((item, index) => { item.classList.toggle('highlighted', index % totalOriginalItems === middleItemIndex % totalOriginalItems); }); }
-            function rotateCarousel() { if (isResetting) return; currentIndex++; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; updateHighlight(); }
+            function rotateCarousel() { if (isResetting) return; currentIndex++; list.style.transition = `transform ${carouselTransitionDuration}ms ease-in-out`; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; updateHighlight(); }
             function stopCarousel() { if (intervalId) { clearInterval(intervalId); intervalId = null; } }
             function startCarousel() { stopCarousel(); intervalId = setInterval(rotateCarousel, rotationInterval); }
-            list.addEventListener('transitionend', () => { if (isResetting) return; if (currentIndex >= totalOriginalItems * 2) { isResetting = true; list.style.transition = 'none'; currentIndex %= totalOriginalItems; currentIndex += totalOriginalItems; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; setTimeout(() => { list.style.transition = `transform ${transitionDuration}ms ease-in-out`; isResetting = false; }, 20); } });
-            if (totalOriginalItems > 0) { currentIndex = totalOriginalItems; list.style.transition = 'none'; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; list.offsetHeight; list.style.transition = `transform ${transitionDuration}ms ease-in-out`; }
+            list.addEventListener('transitionend', () => { if (isResetting) return; if (currentIndex >= totalOriginalItems * 2) { isResetting = true; list.style.transition = 'none'; currentIndex %= totalOriginalItems; currentIndex += totalOriginalItems; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; setTimeout(() => { list.style.transition = `transform ${carouselTransitionDuration}ms ease-in-out`; isResetting = false; }, 20); } });
+            if (totalOriginalItems > 0) { currentIndex = totalOriginalItems; list.style.transition = 'none'; list.style.transform = `translateY(-${currentIndex * itemHeight}px)`; list.offsetHeight; list.style.transition = `transform ${carouselTransitionDuration}ms ease-in-out`; }
             updateHighlight();
             if (totalOriginalItems >= 3) { startCarousel(); carouselContainer.addEventListener('mouseenter', stopCarousel); carouselContainer.addEventListener('mouseleave', startCarousel); }
         });
-
-         // --- Popup Position Logic (Using original script) ---
-         document.querySelectorAll('.node-container').forEach(container => {
-             container.addEventListener('mouseenter', () => {
-                 if (window.innerWidth < 768) return;
-                 const nodeImage = container.querySelector('.node-image');
-                 const popup = container.querySelector('.popup');
-                 if (!nodeImage || !popup) return;
-                 const nodeRect = nodeImage.getBoundingClientRect();
-                 const popupHeight = popup.offsetHeight;
-                 if (nodeRect.top < popupHeight + 20 && !popup.classList.contains('popup-bottom')) {
-                      popup.classList.add('popup-bottom');
-                 } else if (nodeRect.top >= popupHeight + 20 && popup.classList.contains('popup-bottom')) {
-                      popup.classList.remove('popup-bottom');
-                 }
-             });
-         });
     </script>
 
 </body>
