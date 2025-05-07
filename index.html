@@ -295,7 +295,7 @@
                 <div id="atlas-node-container" class="node-container" style="top: calc(50% - 40px); left: calc(30% - 40px);">
                     <img class="node-image" src="https://imgur.com/0ya7Fj7.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/60a5fa/FFFFFF?text=Atlas';" alt="Atlas Icon">
                     <div class="node-label">Atlas</div> 
-                    <div class="node-description">Data Ingestion & Enrichment</div>
+                    <div class="node-description">Data Integration & Enrichment</div>
                     <div class="popup" id="atlas-hover-popup"> <h3 class="font-semibold mb-1">Atlas</h3>
                         <p>Streamline the preparation and transformation of diverse, unstructured data...</p>
                         <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="atlas">Learn More</a>
@@ -313,7 +313,7 @@
                 <div id="argus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(85% - 130px);">
                     <img class="node-image" src="https://imgur.com/xMcN4Yw.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2d088/FFFFFF?text=Argus';" alt="Argus Icon">
                     <div class="node-label">Argus</div> 
-                    <div class="node-description">Anomaly Detection & RCA</div>
+                    <div class="node-description">Noise Reduction & RCA</div>
                     <div class="popup popup-bottom" id="argus-hover-popup"> <h3 class="font-semibold mb-1">Argus</h3>
                         <p>Transform log management to proactive monitoring. Uses advanced ML...</p>
                         <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="argus">Learn More</a>
@@ -322,7 +322,7 @@
                 <div id="hephaestus-node-container" class="node-container" style="top: calc(50% + 70px); left: calc(75% + 50px);">
                     <img class="node-image" src="https://imgur.com/7QbiKPT.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/f2a088/FFFFFF?text=Hephaestus';" alt="Hephaestus Icon">
                     <div class="node-label">Hephaestus</div> 
-                    <div class="node-description">Action & Automation</div>
+                    <div class="node-description">Action & automation</div>
                     <div class="popup popup-bottom" id="hephaestus-hover-popup"> <h3 class="font-semibold mb-1">Hephaestus</h3>
                         <p>Optimize performance and cost efficiency in data environments...</p>
                         <a href="#" class="text-blue-400 hover:underline mt-2 inline-block learn-more-link" data-component="hephaestus">Learn More</a>
@@ -509,38 +509,32 @@
                 {
                     anchorId: 'sources-section', 
                     flowPopupId: 'flow-popup-sources', 
-                    title: 'Sources',
-                    content: 'Sources & Ingestion: Collect and unify data from diverse IT monitoring, ITSM, cloud, data, collaboration, and infrastructure sources.'
+                    content: 'Harmonizing with Your Essential Applications.'
                 },
                 {
                     anchorId: 'atlas-node-container',
                     flowPopupId: 'flow-popup-atlas',
-                    title: 'Atlas',
-                    content: 'Alert Context Enrichment: Add context to raw alerts using knowledge bases, operational data stores, topology information, and other relevant data sources.'
+                    content: 'Efficiently ingests and normalizes diverse operational data, powering robust AI applications.'
                 },
                 {
                     anchorId: 'merlin-node-container',
                     flowPopupId: 'flow-popup-merlin',
-                    title: 'Merlin',
-                    content: 'Alert/Event Correlation: Find patterns in alerts through ML, symptom stacks, custom policies, and historical data.'
+                    content: 'Delivers instant resolution context, linking symptoms to solutions with AI insights.'
                 },
                 {
                     anchorId: 'argus-node-container',
                     flowPopupId: 'flow-popup-argus',
-                    title: 'Argus',
-                    content: 'Incident Triaging & Root Cause Analysis (RCA): Prioritize incidents based on impact and identify likely root causes.'
+                    content: 'Proactively signals critical anomalies, cutting through telemetry noise for faster action.'
                 },
                 {
                     anchorId: 'hephaestus-node-container',
                     flowPopupId: 'flow-popup-hephaestus',
-                    title: 'Hephaestus',
-                    content: 'Recommended Actions & Incident Update: Suggest remediation steps and update incident records.'
+                    content: 'Achieves rapid resilience by automating fixes and resolving issues at machine speed.'
                 },
                 {
                     anchorId: 'outcomes-section',
                     flowPopupId: 'flow-popup-outcome',
-                    title: 'Outcome',
-                    content: 'Automated Ticketing, ITSM Integration & Resolution: Integrate with ITSM systems, enable automated resolution, and facilitate feedback loops.'
+                    content: 'Benefits you achieve'
                 }
             ];
 
@@ -568,6 +562,13 @@
                     const showPopup = () => {
                         clearTimeout(hideTimeoutId); // Clear any pending hide timeout
                         if (window.innerWidth < 768) return; 
+
+                        // *** Immediately hide other popups ***
+                        document.querySelectorAll('.popup').forEach(otherPopup => {
+                            if (otherPopup !== hoverPopup) {
+                                otherPopup.style.display = 'none';
+                            }
+                        });
 
                         const nodeImage = container.querySelector('.node-image');
                         if (nodeImage) {
