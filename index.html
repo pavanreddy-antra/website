@@ -96,10 +96,12 @@
             bottom: calc(100% + 15px); /* Default: above element */
             left: 50%;
             width: 250px; /* Consistent width */
-            background-color: #374151; /* Same background */
+            /* background-color: #374151; /* Replaced with gradient */
+            background-image: linear-gradient(to bottom, #374151, #2d3748); /* Subtle gradient */
             color: #d1d5db; /* Same text color */
             padding: 12px;
-            border-radius: 8px;
+            /* border-radius: 8px; /* Replaced with softer corners */
+            border-radius: 0.75rem; /* Softer corners (12px) */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Slightly stronger shadow for flow if desired */
             font-size: 0.875rem;
             line-height: 1.4; /* Adjusted for flow content readability */
@@ -110,10 +112,14 @@
         }
         .flow-popup::after { /* Arrow for flow popups */
             content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
-            border-width: 5px; border-style: solid; border-color: #374151 transparent transparent transparent;
+            border-width: 5px; border-style: solid; 
+            border-color: #374151 transparent transparent transparent; /* Arrow matches top gradient color */
         }
         .flow-popup.popup-bottom { bottom: auto; top: calc(100% + 15px); }
-        .flow-popup.popup-bottom::after { top: auto; bottom: 100%; border-color: transparent transparent #374151 transparent; }
+        .flow-popup.popup-bottom::after { 
+            top: auto; bottom: 100%; 
+            border-color: transparent transparent #374151 transparent; /* Arrow matches top gradient color */
+        }
 
         /* Smoother animation with adjusted duration and easing */
         @keyframes fadeInFlowPopup {
@@ -653,9 +659,10 @@
                     flowPopup.classList.add('flow-popup');
                     flowPopup.id = config.flowPopupId;
                     
-                    const h3 = document.createElement('h3');
-                    h3.classList.add('font-semibold', 'mb-1');
-                    flowPopup.appendChild(h3);
+                    // Only add H3 if title exists in config (it doesn't in this version)
+                    // const h3 = document.createElement('h3');
+                    // h3.classList.add('font-semibold', 'mb-1');
+                    // flowPopup.appendChild(h3);
 
                     const p = document.createElement('p');
                     flowPopup.appendChild(p);
@@ -691,16 +698,16 @@
                 const currentAnchorElement = document.getElementById(config.anchorId); 
 
                 if (!currentFlowPopup || !currentAnchorElement) { 
-                    console.warn(`Flow popup or anchor missing for step ${currentFlowStepIndex} (Title: ${config.title})`);
+                    console.warn(`Flow popup or anchor missing for step ${currentFlowStepIndex}`);
                     currentFlowStepIndex = (currentFlowStepIndex + 1) % flowStepsConfig.length;
                     activeFlowTimeout = setTimeout(executeAutomatedFlowStep, DELAY_BETWEEN_POPUPS);
                     return;
                 }
 
-                const h3 = currentFlowPopup.querySelector('h3');
+                // const h3 = currentFlowPopup.querySelector('h3'); // Title is not used in this version
                 const pTag = currentFlowPopup.querySelector('p');
-                if (h3) h3.textContent = config.title;
-                if (pTag) pTag.textContent = config.content;
+                // Update content ONLY for the flow popup paragraph
+                if (pTag) pTag.textContent = config.content; 
 
 
                 currentFlowPopup.classList.remove('popup-bottom'); 
@@ -791,3 +798,4 @@
     </script>
 
 </body>
+</html>
