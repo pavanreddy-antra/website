@@ -146,11 +146,32 @@
         /* --- Logo Cloud & Carousel Styles (Original) --- */
         #logo-cloud-wrapper .logo-container { position: relative; width: 22vw; height: 35vh; max-width: 800px; max-height: 500px; margin: 2rem auto; }
         #logo-cloud-wrapper .logo-card { position: absolute; background-color: #374151; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3); display: flex; justify-content: center; align-items: center; width: 4rem; height: 4rem; z-index: 1; transition: transform 0.2s ease-in-out; animation: float 6s ease-in-out infinite; }
-        #logo-cloud-wrapper #splunk { animation-delay: 0s; } #logo-cloud-wrapper #pagerduty { animation-delay: -1s; } #logo-cloud-wrapper #azure { animation-delay: -2s; } #logo-cloud-wrapper #databricks { animation-delay: -3s; } #logo-cloud-wrapper #confluence { animation-delay: -4s; } #logo-cloud-wrapper #google-drive { animation-delay: -0.5s; } #logo-cloud-wrapper #github { animation-delay: -1.5s; } #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
+        #logo-cloud-wrapper #splunk { animation-delay: 0s; } 
+        #logo-cloud-wrapper #aws-cloudwatch { animation-delay: -1s; } 
+        #logo-cloud-wrapper #azure { animation-delay: -2s; } 
+        #logo-cloud-wrapper #databricks { animation-delay: -3s; } 
+        #logo-cloud-wrapper #confluence { animation-delay: -4s; } 
+        #logo-cloud-wrapper #google-drive { animation-delay: -0.5s; } 
+        #logo-cloud-wrapper #elasticsearch { animation-delay: -1.5s; } 
+        #logo-cloud-wrapper #slack { animation-delay: -2.5s; }
         #logo-cloud-wrapper .logo-card:hover { transform: scale(1.1); animation-play-state: paused; }
         #logo-cloud-wrapper .logo-icon { font-size: 1.75rem; color: #d1d5db; }
-        #logo-cloud-wrapper .fa-github { color: #f3f4f6; } #logo-cloud-wrapper .fa-slack { color: #e0a0e5; } #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; } #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; } #logo-cloud-wrapper .fa-cloud { color: #76b8e4; } #logo-cloud-wrapper .fa-server { color: #f7be8f; } #logo-cloud-wrapper .fa-bell { color: #74d699; } #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
-        #logo-cloud-wrapper #splunk { top: 10%; left: 20%; } #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; } #logo-cloud-wrapper #azure { top: 70%; left: 25%; } #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; } #logo-cloud-wrapper #github { top: -5%; left: 85%; } #logo-cloud-wrapper #slack { top: 65%; left: 80%; }
+        #logo-cloud-wrapper .fa-database { color: #f3f4f6; } /* Style for Elasticsearch icon */
+        #logo-cloud-wrapper .fa-slack { color: #e0a0e5; } 
+        #logo-cloud-wrapper .fa-google-drive { color: #8ab4f8; } 
+        #logo-cloud-wrapper .fa-confluence { color: #a6c5e4; } 
+        #logo-cloud-wrapper .fa-cloud { color: #76b8e4; } 
+        #logo-cloud-wrapper .fa-server { color: #f7be8f; } 
+        #logo-cloud-wrapper .fa-aws { color: #FF9900; } /* Style for AWS icon */
+        #logo-cloud-wrapper .fa-cubes { color: #ff8a7d; }
+        #logo-cloud-wrapper #splunk { top: 10%; left: 20%; } 
+        #logo-cloud-wrapper #aws-cloudwatch { top: 40%; left: 5%; } 
+        #logo-cloud-wrapper #azure { top: 70%; left: 25%; } 
+        #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } 
+        #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } 
+        #logo-cloud-wrapper #google-drive { top: 55%; left: 55%; } 
+        #logo-cloud-wrapper #elasticsearch { top: -5%; left: 85%; } 
+        #logo-cloud-wrapper #slack { top: 65%; left: 80%; }
         #logo-cloud-wrapper .fade-overlay { position: absolute; top: 0; left: 0; width: 70%; height: 100%; background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 70%); pointer-events: none; z-index: 2; }
         #carousel { overflow: hidden; height: 150px; position: relative; border-radius: 0.5rem; }
         .carousel-list { list-style: none; padding: 0; margin: 0; width: 100%; transition: transform 0.8s ease-in-out; }
@@ -230,7 +251,14 @@
             #logo-cloud-wrapper .logo-card { width: 3.5rem; height: 3.5rem; padding: 0.75rem; animation: none; }
             #logo-cloud-wrapper .logo-card:hover { transform: scale(1.1); }
             #logo-cloud-wrapper .logo-icon { font-size: 1.5rem; }
-            #logo-cloud-wrapper #splunk { top: 10%; left: 15%; } #logo-cloud-wrapper #pagerduty { top: 40%; left: 5%; } #logo-cloud-wrapper #azure { top: 70%; left: 20%; } #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } #logo-cloud-wrapper #google-drive { top: 50%; left: 55%; } #logo-cloud-wrapper #github { top: 10%; left: 80%; } #logo-cloud-wrapper #slack { top: 70%; left: 75%; }
+            #logo-cloud-wrapper #splunk { top: 10%; left: 15%; } 
+            #logo-cloud-wrapper #aws-cloudwatch { top: 40%; left: 5%; } 
+            #logo-cloud-wrapper #azure { top: 70%; left: 20%; } 
+            #logo-cloud-wrapper #databricks { top: 5%; left: 50%; } 
+            #logo-cloud-wrapper #confluence { top: 25%; left: 75%; } 
+            #logo-cloud-wrapper #google-drive { top: 50%; left: 55%; } 
+            #logo-cloud-wrapper #elasticsearch { top: 10%; left: 80%; } 
+            #logo-cloud-wrapper #slack { top: 70%; left: 75%; }
             #logo-cloud-wrapper .fade-overlay { width: 45%; background: linear-gradient(to right, #111827 10%, rgba(17, 24, 39, 0) 50%); }
             .diagram-content { height: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
             .node-container { position: relative; top: auto; left: auto; margin: 0; display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -278,12 +306,12 @@
                 <div class="logo-container">
                     <div class="fade-overlay"></div>
                     <div id="splunk" class="logo-card" aria-label="Splunk Logo"><i class="fas fa-server logo-icon" title="Splunk"></i></div>
-                    <div id="pagerduty" class="logo-card" aria-label="PagerDuty Logo"><i class="fas fa-bell logo-icon" title="PagerDuty"></i></div>
+                    <div id="aws-cloudwatch" class="logo-card" aria-label="AWS CloudWatch Logo"><i class="fab fa-aws logo-icon" title="AWS CloudWatch"></i></div> 
                     <div id="azure" class="logo-card" aria-label="Azure Cloud Logo"><i class="fas fa-cloud logo-icon" title="Azure Cloud"></i></div>
                     <div id="databricks" class="logo-card" aria-label="Databricks Logo"><i class="fas fa-cubes logo-icon" title="Databricks"></i></div>
                     <div id="confluence" class="logo-card" aria-label="Confluence Logo"><i class="fab fa-confluence logo-icon" title="Confluence"></i></div>
                     <div id="google-drive" class="logo-card" aria-label="Google Drive Logo"><i class="fab fa-google-drive logo-icon" title="Google Drive"></i></div>
-                    <div id="github" class="logo-card" aria-label="GitHub Logo"><i class="fab fa-github logo-icon" title="GitHub"></i></div>
+                    <div id="elasticsearch" class="logo-card" aria-label="Elasticsearch Logo"><i class="fas fa-database logo-icon" title="Elasticsearch"></i></div> 
                     <div id="slack" class="logo-card" aria-label="Slack Logo"><i class="fab fa-slack logo-icon" title="Slack"></i></div>
                     </div>
             </div>
@@ -698,13 +726,13 @@
                 const currentAnchorElement = document.getElementById(config.anchorId); 
 
                 if (!currentFlowPopup || !currentAnchorElement) { 
-                    console.warn(`Flow popup or anchor missing for step ${currentFlowStepIndex}`);
+                    console.warn(`Flow popup or anchor missing for step ${currentFlowStepIndex}`); // Removed title reference as it's not in this config
                     currentFlowStepIndex = (currentFlowStepIndex + 1) % flowStepsConfig.length;
                     activeFlowTimeout = setTimeout(executeAutomatedFlowStep, DELAY_BETWEEN_POPUPS);
                     return;
                 }
 
-                // const h3 = currentFlowPopup.querySelector('h3'); // Title is not used in this version
+                // const h3 = currentFlowPopup.querySelector('h3'); // Title element not created in this version
                 const pTag = currentFlowPopup.querySelector('p');
                 // Update content ONLY for the flow popup paragraph
                 if (pTag) pTag.textContent = config.content; 
