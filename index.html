@@ -96,19 +96,18 @@
             bottom: calc(100% + 15px); /* Default: above element */
             left: 50%;
             width: 250px; /* Consistent width */
-            /* background-color: #374151; /* Replaced with gradient */
             background-image: linear-gradient(to bottom, #374151, #2d3748); /* Subtle gradient */
             color: #d1d5db; /* Same text color */
             padding: 12px;
-            /* border-radius: 8px; /* Replaced with softer corners */
             border-radius: 0.75rem; /* Softer corners (12px) */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Slightly stronger shadow for flow if desired */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Base shadow */
             font-size: 0.875rem;
             line-height: 1.4; /* Adjusted for flow content readability */
-            z-index: 20; /* Higher z-index to ensure it's above hover popups if they overlap briefly */
+            z-index: 20; /* Higher z-index */
             text-align: left;
             font-weight: normal;
             border: 1px solid #4b5563;
+            transition: box-shadow 0.5s ease-in-out; /* Add transition for the shadow */
         }
         .flow-popup::after { /* Arrow for flow popups */
             content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
@@ -121,26 +120,29 @@
             border-color: transparent transparent #374151 transparent; /* Arrow matches top gradient color */
         }
 
-        /* Smoother animation with adjusted duration and easing */
+        /* Animation Keyframes */
         @keyframes fadeInFlowPopup {
-          from { opacity: 0; transform: translate(-50%, 10px); } /* Start slightly lower */
+          from { opacity: 0; transform: translate(-50%, 10px); } 
           to   { opacity: 1; transform: translate(-50%, 0px); }
         }
         @keyframes fadeOutFlowPopup {
           from { opacity: 1; transform: translate(-50%, 0px); }
-          to   { opacity: 0; transform: translate(-50%, -10px); } /* End slightly higher */
+          to   { opacity: 0; transform: translate(-50%, -10px); } 
         }
 
+        /* Animation Application & Glow Effect */
         .flow-popup.flow-popup-active {
           display: block !important; 
           opacity: 0; 
           transform: translate(-50%, 10px); 
-          animation: fadeInFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+          animation: fadeInFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+          box-shadow: 0 0 12px 3px rgba(96, 165, 250, 0.5), 0 5px 15px rgba(0, 0, 0, 0.5); /* Added glow + original shadow */
         }
         .flow-popup.flow-popup-hiding {
           opacity: 1; 
           transform: translate(-50%, 0px); 
-          animation: fadeOutFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Slower and smoother */
+          animation: fadeOutFlowPopup 5.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; 
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Revert to original shadow during fade out */
         }
 
         /* --- Logo Cloud & Carousel Styles (Original) --- */
